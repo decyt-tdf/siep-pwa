@@ -80,6 +80,10 @@
         },
         {
           text: 'Paso 2',
+          disabled: false
+        },
+        {
+          text: 'Finalizado',
           disabled: true
         }
       ]

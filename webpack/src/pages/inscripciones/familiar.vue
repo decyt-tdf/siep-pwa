@@ -28,7 +28,7 @@
       breadcrumbs: [
         {
           text: 'Paso 1',
-          disabled: false
+          disabled: true
         },
         {
           text: 'Paso 2',
