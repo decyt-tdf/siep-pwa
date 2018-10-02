@@ -26,8 +26,10 @@ const module = {
     updateAuthApi: function(state, apiResponse){
       state.authApi = apiResponse;
     },
-    removeWebToken: function(state){
-      state.authToken = '';
+    logout: function(state){
+      state.loggedIn = false;
+      state.authToken = null;
+      state.authApi = {};
     }
   },
   actions: {
@@ -62,13 +64,9 @@ const module = {
         path: '/'
       });
     },
-    // Eliminar token del modelo
+    // Se desloguea y redirecciona a /login
     logout: function(context){
-      context.commit('removeWebToken');
-      state.loggedIn = true;
-      router.push({
-        path: '/home'
-      });
+      context.commit('logout');
     },
     apiGetUserData: function({commit,dispatch,state}) {
       if(!this.apiGetUserDataRunning) {
@@ -113,9 +111,13 @@ const module = {
       // Header con token
       curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
 
-      return curl.get('/api/personas',{
+      var response = curl.get('/api/personas',{
         params: payload
       });
+
+      console.log(response);
+
+      return response;
     },
     apiCreatePersona: function({commit,dispatch,state},payload) {
       console.log('user.apiCreatePersona',payload);
