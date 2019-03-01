@@ -33,6 +33,9 @@
         apigw: process.env.SIEP_API_GW_INGRESS,
       }
     },
+    created: function(){
+      store.commit('updateTitle',"SIEP | Familiares");
+    },
     components :{ FacebookIcon,GoogleIcon  },
     name: "login",
     methods:{
