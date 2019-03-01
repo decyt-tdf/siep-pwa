@@ -28,6 +28,20 @@
       <router-view/>
     </v-content>
 
+    <!-- Footer -->
+    <v-footer
+      height="auto"
+      color="primary lighten-1"
+    >
+      <v-flex
+        text-xs-center
+        white--text
+        xs12
+      >
+        &copy; 2019 — <strong>Subsecretaría de Planeamiento Educativo, Informática y Evaluación</strong>
+      </v-flex>
+    </v-footer>
+
   </v-app>
 </template>
 
