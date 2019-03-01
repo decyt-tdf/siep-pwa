@@ -5,12 +5,17 @@ const menu = {
       icon: 'home',
       title: 'Inicio',
       name: 'home'
+    },
+    {
+      icon: 'school',
+      title: 'Instituciones',
+      name: 'inscripciones.instituciones'
+    },
+    {
+      icon: 'power_settings_new',
+      title: 'Cerrar Sesion',
+      name: 'login'
     }
-    // {
-    //   icon: 'people',
-    //   title: 'Inscripciones',
-    //   name: 'inscripciones'
-    // }
   ]
 };
 
