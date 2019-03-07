@@ -2,7 +2,7 @@
     <gmap-map
       :center="center"
       :zoom="zoom"
-      style="margin-left:10px; width:100%;  height: 450px;"
+      class="googleMaps"
       ref="mapRef"
     >
       <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
@@ -166,3 +166,11 @@
     }
   };
 </script>
+<style>
+.googleMaps{
+  margin-left: 5px;
+  width: 100%;
+  height: 450px;
+}
+</style>
+
