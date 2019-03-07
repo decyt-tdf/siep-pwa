@@ -1,7 +1,7 @@
 <template >
     <v-container fluid text-xs-center >
-      <v-layout id="top" flex row wrap align-content-space-between justify-center >
-        <v-flex class="scrollable-content" xs12 sm12 md5 lg5 xl5 mb-2>
+      <v-layout v-resize="onResize" id="top" flex row wrap align-content-space-between justify-center >
+        <v-flex v-bind:class="{ 'scrollable-content' : !isMobile, 'scrollable-content-mobile' : isMobile}" xs12 sm12 md5 lg5 xl5 mb-2>
             <v-flex xs12 md12 lg12 xl12>
               <!-- <v-text-field
                 v-model="filtro.nombre"
@@ -19,7 +19,7 @@
           <!-- <div xs12 md12 lg12 xl12 class="text-xs-center"><v-chip label>Si lo desea, además puede utilizar los filtros listados aquí debajo</v-chip></div> -->
           <v-flex xs12 sm12 md12 lg12 xl12 mt-1>
             <div class="text-center">
-              <p ligth>Si lo desea, además puede utilizar los filtros listados aquí debajo</p>
+              <p ligth>Si lo desea, además puede utilizar los filtros</p>
             </div>
           </v-flex>
 
@@ -42,20 +42,20 @@
                     label="Seleccione Sector"
             ></v-combobox>
 
-            <v-container>
+            <v-flex xs12 sm12 md12 lg12 xl12>
                 <v-btn
                         class="mx-0"
                         color="primary"
-                        @click="findInstitution"
+                        @click="$vuetify.goTo(target, scrollOptions)"
                         :loading="searching"
                 >
                     <v-icon left large>search</v-icon>Buscar
                 </v-btn>
-            </v-container>
+            </v-flex>
 
 
             <!-- Resultados de busqueda -->
-            <div v-for="item in resultado" :key="item.id">
+            <div v-for="item in resultado" :key="item.id" ref="results" >
                 <v-card>
                     <v-divider></v-divider>
                     <v-list dense>
@@ -95,16 +95,18 @@
     components: { GoogleMap, SelectApiForms },
     mounted: function(){
       this.fillLocations();
+      this.onResize();
     },
     created: function(){
       store.commit('updateTitle',"SIEP | Instituciones");
     },
     data: ()=>({
-
+      isMobile:false,
       coords:{
         latitud: -68.2746,
         longitud: -68.3186003,
       },
+      type: 'element',
       markers:[],
       type: 'number',
       number: 9999,
@@ -138,24 +140,30 @@
     }),
     computed:{
       target () {
-        const value = 0;
+        this.findInstitution();
+        const value = this[this.type]
         if (!isNaN(value)) return Number(value)
         else return value
       },
-      options () {
+      scrollOptions () {
         return {
-          duration: this.duration,
-          offset: this.offset,
+          duration: 400,
+          offset: 0,
           easing: this.easing
         }
       },
       element () {
-        if (this.selected === 'Button') return this.$refs.button
-        else if (this.selected === 'Radio group') return this.$refs.radio
+        return this.$refs.results
       }
     },
     methods:{
-
+      onResize(){
+        if(window.innerWidth <= 480){
+          this.isMobile = true;
+        }else{
+          this.isMobile = false;
+        }
+      },
       fillLocations: function() {
         var vm = this;
         const curl = axios.create({
@@ -251,6 +259,17 @@
 <style scoped>
 
   .scrollable-content {
+    height: 500px;
+    background: white;
+    flex-grow: 1;
+
+    overflow: auto;
+
+    /* for Firefox */
+    min-height: 0;
+  }
+
+  .scrollable-content-mobile {
     height: 500px;
     background: white;
     flex-grow: 1;
