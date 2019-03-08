@@ -44,10 +44,11 @@
 
             <v-flex xs12 sm12 md12 lg12 xl12>
                 <v-btn
-                        class="mx-0"
-                        color="primary"
-                        @click="$vuetify.goTo(target, scrollOptions)"
-                        :loading="searching"
+                  class="mx-0"
+                  color="primary"
+                  @click="$vuetify.goTo(target, scrollOptions)"
+                  :loading="searching"
+                  ref="button"
                 >
                     <v-icon left large>search</v-icon>Buscar
                 </v-btn>
@@ -81,7 +82,6 @@
 <script>
   import router from '../../router'
   import axios from 'axios'
-  import * as easings from 'vuetify/es5/util/easing-patterns'
 
 
   import SelectApiForms from '../../components/apiforms/selectbox'
@@ -113,10 +113,8 @@
       selector: '#top',
       selected: 'Button',
       elements: ['Button', 'Radio group'],
-      duration: 300,
-      offset: 0,
-      easing: 'easeInOutCubic',
-      easings: Object.keys(easings),
+      duration: 800,
+      offset: -10,
       error:"",
       searching:false,
       headers:['Nombre'],
@@ -141,19 +139,18 @@
     computed:{
       target () {
         this.findInstitution();
-        const value = this[this.type]
-        if (!isNaN(value)) return Number(value)
-        else return value
+        // const value = this[this.type]
+        // if (!isNaN(value)) return Number(value)
+        return this.$refs.button
       },
       scrollOptions () {
         return {
-          duration: 400,
-          offset: 0,
-          easing: this.easing
+          duration: this.duration,
+          offset: this.offset
         }
       },
       element () {
-        return this.$refs.results
+        return this.$refs.button
       }
     },
     methods:{
