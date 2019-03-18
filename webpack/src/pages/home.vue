@@ -3,6 +3,7 @@
   <v-jumbotron>
     <v-container fill-height>
       <v-layout align-center>
+        
 
           <v-flex xs12 class="text-xs-center">
             <v-progress-circular
@@ -42,17 +43,16 @@
                   </v-btn>
                 </v-flex>
               </div>
-              <!-- EN CASO DE QUE LA PERSONA ESTE DEFINIDA -->
+              <!-- EN CASO QUE LA PERSONA ESTE DEFINIDA -->
               <div v-else>
 
                 <!-- EDICION DE PERSONA -->
-                <!--
+                
                 <v-flex>
                   <v-btn class="mx-0" color="orange" dark large @click="goToFamiliar('update')">
                     <v-icon left>edit</v-icon>Editar  mi perfil
                   </v-btn>
                 </v-flex>
-                -->
 
                 <v-flex>
                   <v-btn class="mx-0" color="primary" large @click="goToStudent">

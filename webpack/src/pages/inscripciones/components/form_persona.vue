@@ -282,6 +282,8 @@
     },
     methods:{
       createPersona:function(){
+        this.form.pcia_nac ="esta";
+        this.form.nacionalidad ="esta";
         store.dispatch('apiCreatePersona',this.form);
       },
       updatePersona:function(){
