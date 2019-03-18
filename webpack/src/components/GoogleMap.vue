@@ -14,6 +14,8 @@
         :position="m.position"
         :draggable="true"
         :clickable="true"
+        title="Click para mostrar Información"
+        icon= "http://maps.google.com/mapfiles/kml/shapes/info-i.png"
         @click="showCenterInfo(m,index)"
       ></gmap-marker>
     </gmap-map>
@@ -170,7 +172,7 @@
 .googleMaps{
   margin-left: 5px;
   width: 100%;
-  height: 450px;
+  height: 500px;
 }
 </style>
 
