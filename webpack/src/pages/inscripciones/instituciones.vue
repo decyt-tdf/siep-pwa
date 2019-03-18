@@ -13,11 +13,7 @@
               label="Busque por Nombre de Institución" 
               custom="nombre"/>
             </v-flex>
-
-          <v-divider xs12 md12 lg12 xl12></v-divider>
-
-          <!-- <div xs12 md12 lg12 xl12 class="text-xs-center"><v-chip label>Si lo desea, además puede utilizar los filtros listados aquí debajo</v-chip></div> -->
-          <v-flex xs12 sm12 md12 lg12 xl12 mt-1>
+          <v-flex xs12 sm12 md12 lg12 xl12>
             <div class="text-center">
               <p ligth>Si lo desea, además puede utilizar los filtros</p>
             </div>
@@ -42,12 +38,29 @@
                     label="Seleccione Sector"
             ></v-combobox>
 
+            <v-combobox
+                    v-model="filtro.ambito"
+                    :items="combo_ambito"
+                    label="Seleccione Ambito"
+            ></v-combobox>
+
             <v-flex xs12 sm12 md12 lg12 xl12>
                 <v-btn
-                        class="mx-0"
-                        color="primary"
-                        @click="$vuetify.goTo(target, scrollOptions)"
-                        :loading="searching"
+                  class="mx-0"
+                  color="primary"
+                  v-scroll-to="{
+                    el: '#results',
+                    duration: 500,
+                    easing: 'ease-in-out',
+                    offset: -100,
+                    force: true,
+                    cancelable: true,
+                    onDone: findInstitution,
+                    x: false,
+                    y: true
+                  }"
+                  :loading="searching"
+                  ref="button"
                 >
                     <v-icon left large>search</v-icon>Buscar
                 </v-btn>
@@ -55,22 +68,36 @@
 
 
             <!-- Resultados de busqueda -->
-            <div v-for="item in resultado" :key="item.id" ref="results" >
+            <div id="results" ref="results">
+              <div v-for="item in resultado" :key="item.id" >
                 <v-card>
-                    <v-divider></v-divider>
-                    <v-list dense>
-                      <h3 class="subheading mb-0 align-start"><strong>CUE Anexo: </strong>{{ item.cue }} - {{ item.nombre }}</h3>
-                    </v-list>
-                  <v-btn @click="showCenterInfo(item)" outline color="indigo">
+                  <v-divider></v-divider>
+                  <v-list dense>
+                    <h3 class="subheading mb-0 align-start"><strong>CUE Anexo: </strong>{{ item.cue }} - {{ item.nombre }}</h3>
+                  </v-list>
+                  <v-btn v-scroll-to="{
+                    el: '#maps',
+                    duration: 500,
+                    easing: 'ease-in-out',
+                    offset: -50,
+                    force: true,
+                    cancelable: true,
+                    onStart: function(element) {
+                      showCenterInfo(item);
+                    },
+                    x: false,
+                    y: true
+                  }" 
+                  outline color="indigo">
                     Ver En Mapa
                   </v-btn>
-
                 </v-card>
+              </div>
             </div>
 
         </v-flex>
         <!-- Google Maps -->
-        <v-flex xs12 sm12 md7 lg7 x7>
+        <v-flex xs12 sm12 md7 lg7 x7 id="maps" ref="maps">
           <google-map :coords="coords" :markers_array="markers"/>
         </v-flex>
       </v-layout>
@@ -81,7 +108,6 @@
 <script>
   import router from '../../router'
   import axios from 'axios'
-  import * as easings from 'vuetify/es5/util/easing-patterns'
 
 
   import SelectApiForms from '../../components/apiforms/selectbox'
@@ -106,17 +132,11 @@
         latitud: -68.2746,
         longitud: -68.3186003,
       },
-      type: 'element',
       markers:[],
-      type: 'number',
-      number: 9999,
-      selector: '#top',
       selected: 'Button',
       elements: ['Button', 'Radio group'],
-      duration: 300,
-      offset: 0,
-      easing: 'easeInOutCubic',
-      easings: Object.keys(easings),
+      duration: 800,
+      offset: -10,
       error:"",
       searching:false,
       headers:['Nombre'],
@@ -128,8 +148,9 @@
       centro_nombre:"",
       combo_ciudades_api:[],
       combo_ciudades_searching:false,
-      combo_niveles: ['Maternal - Inicial','Común - Inicial','Común - Primario','Adultos - Primario','Común - Secundario','Adultos - Secundario'],
+      combo_niveles: ['Maternal - Inicial','Común - Inicial','Común - Primario','Adultos - Primario','Común - Secundario','Adultos - Secundario', 'Común - Superior'],
       combo_sectores:["ESTATAL","PRIVADO"],
+      combo_ambito: ['Rural', 'Urbano'],
       dialog_ops:{
         dialog: false,
         buttonName:"",
@@ -141,19 +162,18 @@
     computed:{
       target () {
         this.findInstitution();
-        const value = this[this.type]
-        if (!isNaN(value)) return Number(value)
-        else return value
+        // const value = this[this.type]
+        // if (!isNaN(value)) return Number(value)
+        return this.$refs.button
       },
       scrollOptions () {
         return {
-          duration: 400,
-          offset: 0,
-          easing: this.easing
+          duration: this.duration,
+          offset: this.offset
         }
       },
       element () {
-        return this.$refs.results
+        return this.$refs.button
       }
     },
     methods:{
@@ -259,7 +279,7 @@
 <style scoped>
 
   .scrollable-content {
-    height: 500px;
+    height: 550px;
     background: white;
     flex-grow: 1;
 
@@ -270,7 +290,7 @@
   }
 
   .scrollable-content-mobile {
-    height: 500px;
+    height: 600px;
     background: white;
     flex-grow: 1;
 
