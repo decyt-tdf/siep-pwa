@@ -131,7 +131,39 @@ const module = {
       curl.post('/api/personas',payload)
           .then(function (response) {
             // handle success
+            console.log(response.data);
             if(response.data.persona.id)
+            {
+              if(payload.familiar)
+              {
+                dispatch('apiGetUserData');
+              } else {
+                router.push({
+                  path: '/inscripciones/finalizar'
+                });
+              }
+            } else {
+              console.log(response.data);
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error.response.data);
+          });
+    },
+    apiUpdatePersona: function({commit,dispatch,state},payload) {
+      // console.log('user.apiUpdatePersona',payload);
+
+      const curl = axios.create({
+        baseURL: process.env.SIEP_API_GW_INGRESS
+      });
+      // Header con token
+      curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
+      curl.post('/api/personas/'+state.authApi.persona.id,payload)
+          .then(function (response) {
+            // handle success
+            console.log(response.data);
+            if(response.data.updated)
             {
               if(payload.familiar)
               {
