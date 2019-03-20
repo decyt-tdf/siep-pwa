@@ -8,6 +8,7 @@
             :rules="inputRules"
             label="Vinculo"
             hint="Campo Requerido"
+            :disabled="disabledOnUpdate"
             required
     ></v-combobox>
 
@@ -17,6 +18,7 @@
             :rules="inputRules"
             label="Nombres"
             hint="Campo Requerido"
+            :disabled="disabledOnUpdate"
             required
     ></v-text-field>
 
@@ -26,6 +28,7 @@
             :rules="inputRules"
             label="Apellidos"
             hint="Campo Requerido"
+            :disabled="disabledOnUpdate"
             required
     ></v-text-field>
 
@@ -39,7 +42,8 @@
         offset-y
         full-width
         max-width="290px"
-        min-width="290px">
+        min-width="290px"
+        :disabled="disabledOnUpdate">
         <v-text-field
             slot="activator"
             v-model="computedDateFormatted"
@@ -60,36 +64,6 @@
         ></v-date-picker>
     </v-menu>
 
-    <!--<v-menu-->
-            <!--ref="menu"-->
-            <!--:close-on-content-click="false"-->
-            <!--v-model="menu_date_picker"-->
-            <!--:nudge-right="40"-->
-            <!--lazy-->
-            <!--transition="scale-transition"-->
-            <!--offset-y-->
-            <!--full-width-->
-            <!--min-width="290px"-->
-    <!--&gt;-->
-      <!--<v-text-field-->
-            <!--slot="activator"-->
-            <!--v-model="computedDateFormatted"-->
-            <!--label="Fecha de Nacimiento"-->
-            <!--hint="DD/MM/AAAA"-->
-            <!--persistent-hint-->
-            <!--prepend-icon="event"-->
-            <!--readonly-->
-      <!--&gt;</v-text-field>-->
-      <!--<v-date-picker-->
-            <!--ref="picker"-->
-            <!--v-model="form.fecha_nac"-->
-            <!--locale="es-ar"-->
-            <!--:max="new Date().toISOString().substr(0, 10)"-->
-            <!--min="1950-01-01"-->
-            <!--@change="save"-->
-      <!--&gt;</v-date-picker>-->
-    <!--</v-menu>-->
-
     <!-- Sexo -->
     <v-combobox
           v-model="form.sexo"
@@ -97,7 +71,7 @@
           :rules="inputRules"
           label="Sexo"
           hint="Campo Requerido"
-
+          :disabled="disabledOnUpdate"
           required
     ></v-combobox>
 
@@ -108,6 +82,7 @@
             :rules="inputRules"
             label="Tipo de Documento"
             hint="Campo Requerido"
+            :disabled="disabledOnUpdate"
             required
     ></v-combobox>
 
@@ -120,6 +95,7 @@
             type="number"
             min="0"
             max="999999999"
+            :disabled="disabledOnUpdate"
             required
     ></v-text-field>
 
@@ -201,6 +177,7 @@
     <v-btn color="primary" @click="goBack"><v-icon>navigate_before</v-icon> Volver</v-btn>
     <v-btn v-if="mode=='create'" color="light-green lighten-1" @click="createPersona">Guardar</v-btn>
     <v-btn v-if="mode=='update'" color="light-orange lighten-1" @click="updatePersona">Actualizar</v-btn>
+    <!-- <input v-if="mode=='update'" v-model="form._token" name="_token" type="hidden" id="_token" :value="csrf_token()" /> -->
   </v-flex>
 </template>
 
@@ -210,6 +187,7 @@
   export default {
     props: ['familiar','alumno','mode','title'],
     data: ()=>({
+      disabledOnUpdate:false,
       inputRules: [
         v => !!v || 'Campo Requerido',
         v => (!v || v.length >= 3) || 'El campo debe tener más de 3 caracteres'
@@ -249,27 +227,34 @@
       this.observacionPlaceHolder();
 
       // Se debe setear el tipo de persona a dar de alta
+
       if(this.familiar)
       {
-        this.form.familiar = 1;
-
         // MODO CREATE
-        if(this.mode=='create'){
+        if(this.mode == 'create'){
+          this.disabledOnUpdate = false;
           this.form.email = store.state.user.authApi.email;
         }
 
         // MODO UPDATE
-        if(this.mode=='update'){
+        if(this.mode == 'update'){
+          this.disabledOnUpdate = true;
           if(store.getters.persona) {
             this.form = store.getters.persona;
             this.form.ciudad= this.form.ciudad.nombre;
           }
         }
+
+        this.form.familiar = 1;
+        this.form.alumno = 0;
+
       }
 
       if(this.alumno)
       {
-        this.form.alumno= 1;
+        this.form.email = store.state.user.authApi.email;
+        this.form.alumno = 1;
+        this.form.familiar = 0;
         this.texto_observacion = 'Indique instituciones de preferencia';
       }
 
@@ -284,10 +269,15 @@
       createPersona:function(){
         this.form.pcia_nac ="esta";
         this.form.nacionalidad ="esta";
-        store.dispatch('apiCreatePersona',this.form);
+        console.log(this.form);
+        store.dispatch('apiCreatePersona',_.omitBy(this.form, _.isEmpty));
       },
       updatePersona:function(){
-        store.dispatch('apiUpdatePersona',this.form);
+        this.form.pcia_nac ="esta";
+        this.form.nacionalidad ="esta";
+        console.log(this.form);
+        this.form._method = "PUT";
+        store.dispatch('apiUpdatePersona',_.omitBy(this.form, _.isEmpty));
       },
       goBack:function(){
         router.go(-1);
