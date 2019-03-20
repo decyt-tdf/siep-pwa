@@ -1,8 +1,8 @@
 <template>
 
     <v-jumbotron>
-        <v-container fill-height>
-            <v-layout align-center>
+        <v-container fluid>
+            <v-layout column align-center>
                 <blockquote>
                     <v-flex>
                         <h3 class="display-2 text-xs-center text-sm-center text-md-center text-lg-center font-weight-bold" >Registro Completado!</h3>
@@ -30,6 +30,7 @@
   import router from '../../router'
   export default{
     created: function(){
+      console.log(store.state.user)
       store.commit('updateTitle',"Finalizado");
     },
     computed:{
