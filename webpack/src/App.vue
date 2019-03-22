@@ -25,7 +25,9 @@
 
     <!-- Contenido de navegacion !-->
     <v-content>
-      <router-view/>
+      <transition-page>
+        <router-view/>
+      </transition-page>
     </v-content>
 
     <!-- Footer -->
@@ -48,10 +50,11 @@
 <script>
   import UserSidebar from './components/user_sidebar.vue'
   import MenuSidebar from './components/menu_sidebar.vue'
+  import TransitionPage from './components/TransitionPage.vue'
 
 
   export default {
-    components: { UserSidebar, MenuSidebar},
+    components: { UserSidebar, MenuSidebar, TransitionPage},
     data () {
       return {
         drawer: false,
@@ -70,3 +73,7 @@
     name: 'App'
   }
 </script>
+<style>
+  
+</style>
+
