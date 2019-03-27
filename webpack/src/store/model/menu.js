@@ -12,6 +12,11 @@ const menu = {
       name: 'inscripciones.instituciones'
     },
     {
+      icon: 'message',
+      title: 'Contactenos',
+      name: 'contacto'
+    },
+    {
       icon: 'power_settings_new',
       title: 'Cerrar Sesion',
       name: 'login'
