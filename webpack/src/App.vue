@@ -1,6 +1,8 @@
 <template>
   <v-app>
 
+    
+
     <!-- Sidebar !-->
     <v-navigation-drawer
       persistent
@@ -9,6 +11,7 @@
       fixed
       app
     >
+      
       <!-- Componente UserSidebar -->
       <user-sidebar />
       <v-divider></v-divider>
@@ -25,6 +28,14 @@
 
     <!-- Contenido de navegacion !-->
     <v-content>
+      <!-- Alert Message -->
+      <v-alert
+        :value="alert.show"
+        :type="alert.class" 
+        transition="scale-transition"
+      >
+        {{ alert.message }}
+      </v-alert>
       <transition-page>
         <router-view/>
       </transition-page>
@@ -64,6 +75,16 @@
     computed: {
       menu_toolbar() {
         return store.state.menu_toolbar;
+      },
+      alert() {
+        console.log(store.state.alert.alert);
+        return store.state.alert.alert;
+      }
+      
+    },
+    watch:{
+      alert(newValue,oldValue) {
+        setTimeout(() => newValue.show = false, 3000);
       }
     },
     created(){

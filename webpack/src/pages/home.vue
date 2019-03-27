@@ -15,7 +15,7 @@
             ></v-progress-circular>
 
             <div v-if="!user.loggedIn && !user.apiGetUserDataRunning">
-              <p class="subheading">Por favor, inicie sesion.</p>
+              <p class="subheading">Por favor, inicie sesion para acceder a esta sección.</p>
 
               <div class="text-xs-center">
                 <v-btn round color="primary" small @click="goToLogin">Quiero iniciar sesion</v-btn>
