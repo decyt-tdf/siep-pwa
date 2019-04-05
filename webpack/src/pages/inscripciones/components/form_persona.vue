@@ -8,7 +8,6 @@
             :rules="inputRules"
             label="Vinculo"
             hint="Campo Requerido"
-            :disabled="disabledOnUpdate"
             required
     ></v-combobox>
 
@@ -91,6 +90,7 @@
             v-model="form.documento_nro"
             :rules="inputRules"
             label="Número de Documento"
+            @blur="findDNI()"
             hint="Campo Requerido | Sin Puntos de separación"
             type="number"
             min="0"
@@ -263,21 +263,35 @@
     watch: {
       menu_date_picker (val) {
         val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
+      },
+      'form.documento_nro'(){
+        if(this.disabledOnUpdate){
+          console.log("Está editando su perfíl");
+        }else{
+
+        }
       }
     },
     methods:{
       createPersona:function(){
         this.form.pcia_nac ="esta";
         this.form.nacionalidad ="esta";
+        this.form.isFamiliar = this.familiar;
         console.log(this.form);
         store.dispatch('apiCreatePersona',_.omitBy(this.form, _.isEmpty));
       },
       updatePersona:function(){
         this.form.pcia_nac ="esta";
         this.form.nacionalidad ="esta";
-        console.log(this.form);
+        this.form.isFamiliar = this.familiar;
         this.form._method = "PUT";
         store.dispatch('apiUpdatePersona',_.omitBy(this.form, _.isEmpty));
+      },
+      findDNI:function(){
+        if(this.form.documento_nro.length > 6){
+          store.dispatch('apiFindDni',this.form.documento_nro);
+        }
+
       },
       goBack:function(){
         router.go(-1);
