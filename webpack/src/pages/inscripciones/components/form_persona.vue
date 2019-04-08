@@ -219,17 +219,22 @@
       },
       computedDateFormatted () {
         return this.formatDate(this.form.fecha_nac)
+      },
+      getFamiliar() {
+        return this.familiar
       }
     },
     created: function(){
       store.commit('updateTitle',this.title);
 
       this.observacionPlaceHolder();
+      console.log("Familiar:",this.familiar);
 
       // Se debe setear el tipo de persona a dar de alta
 
-      if(this.familiar)
+      if(this.getFamiliar)
       {
+        console.log("soy Familiar",this.getFamiliar);
         // MODO CREATE
         if(this.mode == 'create'){
           this.disabledOnUpdate = false;
@@ -276,16 +281,19 @@
       createPersona:function(){
         this.form.pcia_nac ="esta";
         this.form.nacionalidad ="esta";
-        this.form.isFamiliar = this.familiar;
+        this.form = _.omitBy(this.form, _.isEmpty);
+        this.form._method = "POST";
+        this.form.familiar = this.getFamiliar ? 1 : 0;
         console.log(this.form);
-        store.dispatch('apiCreatePersona',_.omitBy(this.form, _.isEmpty));
+        store.dispatch('apiCreatePersona',this.form);
       },
       updatePersona:function(){
         this.form.pcia_nac ="esta";
         this.form.nacionalidad ="esta";
-        this.form.isFamiliar = this.familiar;
+        this.form = _.omitBy(this.form, _.isEmpty);
+        this.form.familiar = this.getFamiliar ? 1 : 0;
         this.form._method = "PUT";
-        store.dispatch('apiUpdatePersona',_.omitBy(this.form, _.isEmpty));
+        store.dispatch('apiUpdatePersona',this.form);
       },
       findDNI:function(){
         if(this.form.documento_nro.length > 6){
