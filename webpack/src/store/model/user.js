@@ -128,8 +128,8 @@ const module = {
 
       return response;
     },
-    apiCreatePersona: function({commit,dispatch,state},payload) {
-      console.log('user.apiCreatePersona',payload);
+    apiCreatePersona: function({commit,dispatch,state},createFamiliar) {
+      console.log('user.apiCreatePersona',createFamiliar);
 
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
@@ -137,23 +137,26 @@ const module = {
       // Header con token
       curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
 
-      curl.post('/api/personas',payload)
+      // payload.familiar = payload.isFamiliar;
+
+      curl.post('/api/personas',createFamiliar)
         .then(function (response) {
           // handle success
-          console.log(response.data);
-          if(response.data.persona.id)
+          if(response.data.persona)
           {
-            if(payload.familiar)
+            console.log("Payload esFamiliar?: ",createFamiliar)
+            if(createFamiliar.familiar)
             { 
+              console.log("Es Familiar");
+              createFamiliar.persona_id = response.data.persona.id;
+              dispatch("apiCreateFamiliar",createFamiliar);
               dispatch('apiGetUserData');
             } else {
-                payload.persona_id = response.data.persona.id;
-                payload.familiar_id = state.authApi.persona.id;
-                if(payload.isFamiliar){
-                  dispatch("apiCreateFamiliar",payload);
-                }else{
-                  dispatch("apiGetFamiliar",payload);
-                }
+                console.log("Persona_id: ",response.data.persona.id)
+                console.log("AuthApi:Persona_id: ",state.authApi.persona_id)
+                createFamiliar.persona_id = response.data.persona.id;
+                createFamiliar.familiar_id = state.authApi.persona_id;
+                dispatch("apiGetFamiliar",createFamiliar);
 
                 router.push({
                   path: '/inscripciones/finalizar'
@@ -188,7 +191,7 @@ const module = {
                 dispatch('apiGetUserData');
               } else {
                 // Si es familiar crea el familiar
-                if(payload.isFamiliar){
+                if(payload.familiar){
                   payload.persona_id = state.authApi.persona.id;
                   dispatch("apiCreateFamiliar",payload);
                 }else{
@@ -252,8 +255,12 @@ const module = {
     apiCreateFamiliar:function({commit,dispatch,state},payload){
       console.log('user.apiCreateFamiliar',payload);
 
+      if(!payload.observaciones){
+        payload.observaciones = "N/A";
+      }
       payload.conviviente = 0;
       payload.autorizado_retirar = 0;
+      
       payload._method = "POST";
 
       const curl = axios.create({
@@ -265,15 +272,16 @@ const module = {
       curl.post('/api/v1/familiar',payload)
         .then(function (response) {
           // handle success
+          console.log("Familiar: ",response.data);
           if(response.data.familiar.id){
             console.log("Familiar Creado!");
           } else {
-            console.log(response.data);
+            console.log("Algo pasó en la creación del familiar: ",response.data);
           }
         })
         .catch(function (error) {
           // handle error
-          console.log(error);
+          console.log("Algo pasó",error);
         });
     },
     apiCreateAlumno: function({commit,dispatch,state},payload){
