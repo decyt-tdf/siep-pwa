@@ -284,6 +284,7 @@
         this.form = _.omitBy(this.form, _.isEmpty);
         this.form._method = "POST";
         this.form.familiar = this.getFamiliar ? 1 : 0;
+        this.form.alumno = !this.getFamiliar ? 1 : 0;
         console.log(this.form);
         store.dispatch('apiCreatePersona',this.form);
       },
@@ -292,6 +293,7 @@
         this.form.nacionalidad ="esta";
         this.form = _.omitBy(this.form, _.isEmpty);
         this.form.familiar = this.getFamiliar ? 1 : 0;
+        this.form.alumno = !this.getFamiliar ? 1 : 0,
         this.form._method = "PUT";
         store.dispatch('apiUpdatePersona',this.form);
       },

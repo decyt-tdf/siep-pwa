@@ -128,8 +128,8 @@ const module = {
 
       return response;
     },
-    apiCreatePersona: function({commit,dispatch,state},createFamiliar) {
-      console.log('user.apiCreatePersona',createFamiliar);
+    apiCreatePersona: function({commit,dispatch,state},createPersona) {
+      console.log('user.apiCreatePersona',createPersona);
 
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
@@ -139,24 +139,24 @@ const module = {
 
       // payload.familiar = payload.isFamiliar;
 
-      curl.post('/api/personas',createFamiliar)
+      curl.post('/api/personas',createPersona)
         .then(function (response) {
           // handle success
           if(response.data.persona)
           {
-            console.log("Payload esFamiliar?: ",createFamiliar)
-            if(createFamiliar.familiar)
+            console.log("Payload esFamiliar?: ",createPersona)
+            if(createPersona.familiar)
             { 
               console.log("Es Familiar");
-              createFamiliar.persona_id = response.data.persona.id;
-              dispatch("apiCreateFamiliar",createFamiliar);
+              createPersona.persona_id = response.data.persona.id;
+              dispatch("apiCreateFamiliar",createPersona);
               dispatch('apiGetUserData');
             } else {
                 console.log("Persona_id: ",response.data.persona.id)
                 console.log("AuthApi:Persona_id: ",state.authApi.persona_id)
-                createFamiliar.persona_id = response.data.persona.id;
-                createFamiliar.familiar_id = state.authApi.persona_id;
-                dispatch("apiGetFamiliar",createFamiliar);
+                createPersona.persona_id = response.data.persona.id;
+                createPersona.familiar_id = state.authApi.persona_id;
+                dispatch("apiGetFamiliar",createPersona);
 
                 router.push({
                   path: '/inscripciones/finalizar'
