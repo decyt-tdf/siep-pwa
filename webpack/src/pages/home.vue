@@ -73,20 +73,36 @@
 <script>
   import router from '../router'
 
-  export default{
-    created: function(){
+  export default {
+    data: ()=>({
+      personaUpdated:false
+    }),
+    created: function() {
       store.commit('updateTitle',"SIEP | Familiares");
     },
-    computed:{
+    mounted: function() {
+      
+    },
+    computed: {
       user(){
         return store.state.user
       },
       persona(){
+        console.log("tengo persona");
         return store.getters.persona;
-      },
+      }
+    },
+    watch:{
+      persona(value){
+        if(!this.personaUpdated){
+          this.createFamiliar(value);
+        }else{
+          console.log("Ya está actualizado");
+        }
+      }
     },
     methods:{
-      goToLogin:function(){
+      goToLogin: function(){
         router.push('/')
       },
       goToFamiliar:function(mode){
@@ -94,6 +110,24 @@
       },
       goToStudent:function(){
         router.push('/inscripciones')
+      },
+      createFamiliar: function(persona){
+        this.personaUpdated = true;
+        var pers = persona;
+        console.log("Holaaaaa",pers);
+        pers = _.omitBy(pers, _.isEmpty);
+        pers.vinculo
+        pers._method = "POST";
+        pers.familiar = 1;
+        pers.ciudad = pers.ciudad.nombre;
+        pers.alumno = 0;
+        if(pers.sexo === "Masculino"){
+          pers.vinculo = "Padre";
+        }else{
+          pers.vinculo = "Madre";
+        }
+        console.log("Cambiado",pers);
+        store.dispatch('apiCreatePersona',pers);
       }
     }
   }
