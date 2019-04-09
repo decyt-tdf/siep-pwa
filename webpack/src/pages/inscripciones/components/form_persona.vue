@@ -142,10 +142,8 @@
     <!-- Calle numero -->
     <v-text-field
             v-model="form.calle_nro"
-            :rules="inputRulesAlmostOne"
             label="Calle número"
             hint="Campo Requerido"
-            required
     ></v-text-field>
 
     <!-- Depto casa -->
@@ -246,7 +244,7 @@
           this.disabledOnUpdate = true;
           if(store.getters.persona) {
             this.form = store.getters.persona;
-            this.form.ciudad= this.form.ciudad.nombre;
+            this.form.ciudad = this.form.ciudad.nombre;
           }
         }
 

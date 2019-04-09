@@ -54,7 +54,7 @@
       <!-- Resultados de Relaciones con Familiar -->
       <v-container fluid grid-list-md v-if="alumnos.length">
         <p >
-          Aquí debajo se listan los alumnos que están registrados como familiar suyo
+          AQUI DEBAJO SE LISTAN LOS ALUMNOS QUE ESTAN REGISTRADOS COMO FAMILIAR SUYO
         </p>
         <v-layout row wrap>
         <!-- <v-data-iterator
@@ -110,7 +110,7 @@
 
           <br>
           <p>
-            En caso de no obtener resultados de busqueda, puede registrar un alumno nuevo
+            EN CASO DE NO OBTENER RESULTADOS DE BUSQUEDA, PUEDE REGISTRAR UN ALUMNO NUEVO
           </p>
 
           <v-btn color="primary" @click="goNewStudent"><v-icon left>person_add</v-icon>Registrar Nuevo Alumno</v-btn>
