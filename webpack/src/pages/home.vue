@@ -56,7 +56,7 @@
 
                 <v-flex>
                   <v-btn class="mx-0" color="primary" large @click="goToStudent">
-                    <v-icon left>how_to_reg</v-icon>Registrar Alumno
+                    <v-icon left>how_to_reg</v-icon>Agregar Alumno
                   </v-btn>
                 </v-flex>
               </div>
