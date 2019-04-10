@@ -113,7 +113,7 @@
             EN CASO DE NO OBTENER RESULTADOS DE BUSQUEDA, PUEDE REGISTRAR UN ALUMNO NUEVO
           </p>
 
-          <v-btn color="primary" @click="goNewStudent"><v-icon left>person_add</v-icon>Registrar Nuevo Alumno</v-btn>
+          <v-btn color="primary" @click="goNewStudent"><v-icon left>person_add</v-icon> Agregar Alumno</v-btn>
         </v-container>
 
 
