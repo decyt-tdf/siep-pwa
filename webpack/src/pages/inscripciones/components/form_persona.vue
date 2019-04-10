@@ -2,6 +2,7 @@
   <v-flex>
     <!-- Vinculo -->
     <v-combobox
+            id="vinculo"
             v-if="familiar"
             v-model="form.vinculo"
             :items="items_vinculo"
@@ -17,7 +18,6 @@
             :rules="inputRules"
             label="Nombres"
             hint="Campo Requerido"
-            :disabled="disabledOnUpdate"
             required
     ></v-text-field>
 
@@ -27,7 +27,6 @@
             :rules="inputRules"
             label="Apellidos"
             hint="Campo Requerido"
-            :disabled="disabledOnUpdate"
             required
     ></v-text-field>
 
@@ -162,20 +161,19 @@
             required
     ></v-text-field>
 
-    <!-- Comentario -->
-    <v-textarea
+    <!-- Comentario: por el momento está deshabilitado -->
+    <!-- <v-textarea
             v-model="form.observaciones"
             :label="texto_observacion"
             hint="Puede redactar otra observación de interés"
             color="primary"
             counter="100"
             v-bind:placeholder="observacion_placeholder"
-    ></v-textarea>
+    ></v-textarea> -->
 
     <v-btn color="primary" @click="goBack"><v-icon>navigate_before</v-icon> Volver</v-btn>
     <v-btn v-if="mode=='create'" color="light-green lighten-1" @click="createPersona">Guardar</v-btn>
     <v-btn v-if="mode=='update'" color="light-orange lighten-1" @click="updatePersona">Actualizar</v-btn>
-    <!-- <input v-if="mode=='update'" v-model="form._token" name="_token" type="hidden" id="_token" :value="csrf_token()" /> -->
   </v-flex>
 </template>
 
@@ -207,6 +205,7 @@
       texto_observacion: "Observación",
 
       form:{},
+      alerta:{},
 
       date: null,
       menu: false
@@ -277,23 +276,88 @@
     },
     methods:{
       createPersona:function(){
-        this.form.pcia_nac ="esta";
-        this.form.nacionalidad ="esta";
-        this.form = _.omitBy(this.form, _.isEmpty);
-        this.form._method = "POST";
-        this.form.familiar = this.getFamiliar ? 1 : 0;
-        this.form.alumno = !this.getFamiliar ? 1 : 0;
-        console.log(this.form);
-        store.dispatch('apiCreatePersona',this.form);
+        if(_.isEmpty(this.form.vinculo)){
+          var options = {
+              container: '#vinculo',
+              easing: 'ease-in',
+              offset: -60,
+              force: true,
+              cancelable: true,
+              onStart: function(element) {
+                // scrolling started
+              },
+              onDone: function(element) {
+                // scrolling is done
+              },
+              onCancel: function() {
+                // scrolling has been interrupted
+              },
+              x: false,
+              y: true
+          }
+
+          cancelScroll = this.$scrollTo(element, duration, options)
+          this.alerta = {
+            class: "error",
+            message: "Debe completar el campo de Vinculo",
+            show: true
+          };
+          store.dispatch('toggleAlertMessage',this.alerta);
+        }else{
+          this.form.pcia_nac ="esta";
+          this.form.nacionalidad ="esta";
+          this.form = _.omitBy(this.form, _.isEmpty);
+          this.form._method = "POST";
+          this.form.familiar = this.getFamiliar ? 1 : 0;
+          this.form.alumno = !this.getFamiliar ? 1 : 0;
+          console.log(this.form);
+          store.dispatch('apiCreatePersona',this.form);
+        }
+        
       },
       updatePersona:function(){
-        this.form.pcia_nac ="esta";
-        this.form.nacionalidad ="esta";
-        this.form = _.omitBy(this.form, _.isEmpty);
-        this.form.familiar = this.getFamiliar ? 1 : 0;
-        this.form.alumno = !this.getFamiliar ? 1 : 0,
-        this.form._method = "PUT";
-        store.dispatch('apiUpdatePersona',this.form);
+        if(_.isEmpty(this.form.vinculo)){
+
+          var options = {
+              el: '#vinculo',
+              easing: 'ease-in-out',
+              offset: -60,
+              force: true,
+              cancelable: true,
+              onStart: function(element) {
+                // scrolling started
+              },
+              onDone: function(element) {
+                // scrolling is done
+              },
+              onCancel: function() {
+                // scrolling has been interrupted
+              },
+              x: false,
+              y: true
+          }
+
+          var cancelScroll = this.$scrollTo(300, options)
+
+          this.alerta = {
+            show: true,
+            class: "error",
+            message: "Debe completar el campo de Vinculo"
+          };
+          console.log("Enviando Alerta",this.alerta);
+
+          store.dispatch('toggleAlertMessage',this.alerta);
+        }else{
+          this.form.pcia_nac ="esta";
+          this.form.nacionalidad ="esta";
+          this.form = _.omitBy(this.form, _.isEmpty);
+          this.form.familiar = this.getFamiliar ? 1 : 0;
+          this.form.alumno = !this.getFamiliar ? 1 : 0,
+          this.form._method = "PUT";
+          console.log(this.form);
+          store.dispatch('apiUpdatePersona',this.form);
+        }
+        
       },
       findDNI:function(){
         if(this.form.documento_nro.length > 6){

@@ -67,7 +67,7 @@
                 show: true,
                 class: "success",
                 message: "Mensaje Enviado Exitosamente!"
-            };
+              };
             }else{
               vm.alert = {
                 show: true,
