@@ -5,18 +5,34 @@
 
                 <v-carousel v-bind:class="{ 'carousel' : !isMobile, 'carousel-mobile' : isMobile}" light active-class hide-delimiters>
                   <v-carousel-item
-                    v-for="(item,i) in items"
-                    :key="i"
-                    :src="item.src"
-                  ></v-carousel-item>
+                    v-for= "(item,i) in items"
+                    :key= "i"
+                    :src= "item.src"
+                    style="height: 100%"
+                  > </v-carousel-item>
                 </v-carousel>
 
                 <v-divider></v-divider>
-
-                <div class="text-xs-center">
+                <v-flex pt-2 xs12 md12 lg12 xl12 pt5>
+                  <v-card>
+                    <v-card-title>
+                      <div>
+                        <h4>Señores familiares, mediante esta aplicación ustedes podrán:</h4>
+                        <p>
+                          - Agregar/Editar sus datos personales y el tipo de vínculo con el estudiante.<br>
+                          - Agregar/Ver estudiantes vinculados a ustedes.<br>
+                          - Contactarse para consultas referidas al uso de la aplicación.<br>
+                          - Consultar datos de contacto y ubicación de todas las instituciones educativas en la provincia.<br>
+                        </p>
+                      </div>
+                    </v-card-title>
+                  </v-card>
+                </v-flex>
+                
+                <v-flex xs12 md12 lg12 xl12 class="text-xs-center">
                     <v-btn round color="indigo darken-3" dark @click="goTo('facebook')">Ingresar con facebook</v-btn>
                     <v-btn round color="red darken-1" dark @click="goTo('google')">Ingresar con Google</v-btn>
-                </div>
+                </v-flex>
 
             </v-layout>
         </v-slide-y-transition>
@@ -93,11 +109,17 @@
     }
 
     .carousel {
-      height: 250px !important;
+      height: 250px;
     }
 
     .carousel-mobile {
-      height: 200px !important;
+      height: 200px;
+    }
+
+    .v-jumbotron__image { 
+      height: 100% !important;
+      min-width: 50% !important;
+      max-width: 100% !important; 
     }
 
 </style>
