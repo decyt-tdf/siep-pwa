@@ -273,7 +273,7 @@
     },
     methods:{
       createPersona:function(){
-        if(_.isEmpty(this.form.vinculo)){
+        if(_.isEmpty(this.form.vinculo) && this.getFamiliar){
           var options = {
               container: '#vinculo',
               easing: 'ease-in',
@@ -312,7 +312,7 @@
         
       },
       updatePersona:function(){
-        if(_.isEmpty(this.form.vinculo)){
+        if(_.isEmpty(this.form.vinculo) && this.getFamiliar){
 
           var options = {
               el: '#vinculo',

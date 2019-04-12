@@ -2,16 +2,16 @@
   <v-container fluid text-xs-center>
 
     <!-- Breadcrumbs -->
-    <v-breadcrumbs>
-      <v-icon slot="divider">forward</v-icon>
-      <v-breadcrumbs-item
+    <!-- <v-breadcrumbs>
+      <v-icon slot="divider">forward</v-icon> -->
+      <!-- <v-breadcrumbs-item
               v-for="item in breadcrumbs"
               :disabled="item.disabled"
               :key="item.text"
       >
         {{ item.text }}
       </v-breadcrumbs-item>
-    </v-breadcrumbs>
+    </v-breadcrumbs> -->
 
     <!-- Formulario de registro de persona-->
     <form-persona alumno="true" mode="create" title="Estudiantes"/>
