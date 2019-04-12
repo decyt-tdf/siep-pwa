@@ -7,7 +7,7 @@
             v-model="form.vinculo"
             :items="items_vinculo"
             :rules="inputRules"
-            label="Vinculo"
+            label="Vinculo con el Estudiante"
             hint="Campo Requerido"
             required
     ></v-combobox>
@@ -58,7 +58,7 @@
             no-title
             @input="menu_date_picker = false"
             :max="new Date().toISOString().substr(0, 10)"
-            min="1950-01-01"
+            min="1940-01-01"
         ></v-date-picker>
     </v-menu>
 
@@ -225,13 +225,10 @@
       store.commit('updateTitle',this.title);
 
       this.observacionPlaceHolder();
-      console.log("Familiar:",this.familiar);
 
       // Se debe setear el tipo de persona a dar de alta
-
       if(this.getFamiliar)
       {
-        console.log("soy Familiar",this.getFamiliar);
         // MODO CREATE
         if(this.mode == 'create'){
           this.disabledOnUpdate = false;
@@ -299,7 +296,7 @@
           cancelScroll = this.$scrollTo(element, duration, options)
           this.alerta = {
             class: "error",
-            message: "Debe completar el campo de Vinculo",
+            message: "Debe completar el campo de Vinculo con el Estudiante",
             show: true
           };
           store.dispatch('toggleAlertMessage',this.alerta);
@@ -310,7 +307,6 @@
           this.form._method = "POST";
           this.form.familiar = this.getFamiliar ? 1 : 0;
           this.form.alumno = !this.getFamiliar ? 1 : 0;
-          console.log(this.form);
           store.dispatch('apiCreatePersona',this.form);
         }
         
@@ -344,8 +340,6 @@
             class: "error",
             message: "Debe completar el campo de Vinculo"
           };
-          console.log("Enviando Alerta",this.alerta);
-
           store.dispatch('toggleAlertMessage',this.alerta);
         }else{
           this.form.pcia_nac ="esta";
@@ -354,7 +348,6 @@
           this.form.familiar = this.getFamiliar ? 1 : 0;
           this.form.alumno = !this.getFamiliar ? 1 : 0,
           this.form._method = "PUT";
-          console.log(this.form);
           store.dispatch('apiUpdatePersona',this.form);
         }
         

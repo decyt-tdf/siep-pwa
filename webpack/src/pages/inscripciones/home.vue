@@ -1,7 +1,7 @@
 <template>
   <v-container>
       <v-flex xs12 class="text-xs-center">
-          <v-breadcrumbs>
+          <!-- <v-breadcrumbs>
               <v-icon slot="divider">forward</v-icon>
 
               <v-breadcrumbs-item
@@ -11,16 +11,16 @@
               >
                   {{ item.text }}
               </v-breadcrumbs-item>
-          </v-breadcrumbs>
+          </v-breadcrumbs> -->
 
       <v-divider />
 
       <v-text-field
               v-model="documento_nro"
-              label="Ingresar documento del alumno"
+              label="Ingresar documento del Estudiante"
               v-on:keyup.enter="startFindPersona"
       ></v-text-field>
-      <v-btn color="primary" @click="startFindPersona" :loading="findPersonaRunning"><v-icon left>search</v-icon>Buscar</v-btn>
+      <v-btn color="primary" @click="startFindPersona" :loading="findPersonaRunning"><v-icon left>search</v-icon>Buscar Estudiante</v-btn>
 
       <!-- Resultados de busqueda -->
       <v-container fluid grid-list-md>
@@ -40,7 +40,7 @@
                     </div>
                   </v-card-title>
                   <v-card-actions>
-                    <v-btn color="success" @click="goWithSelected(res)"><v-icon left>person</v-icon>Seleccionar alumno</v-btn>
+                    <v-btn color="success" @click="goWithSelected(res)"><v-icon left>person</v-icon>Vincular Estudiante</v-btn>
                   </v-card-actions>
                 </v-flex>
               </v-layout>
@@ -54,7 +54,7 @@
       <!-- Resultados de Relaciones con Familiar -->
       <v-container fluid grid-list-md v-if="alumnos.length">
         <p >
-          AQUI DEBAJO SE LISTAN LOS ALUMNOS QUE ESTAN REGISTRADOS COMO FAMILIAR SUYO
+          AQUI DEBAJO SE LISTAN LOS ESTUDIANTES REGISTRADOS COMO FAMILIAR SUYO
         </p>
         <v-layout row wrap>
         <!-- <v-data-iterator
@@ -110,10 +110,10 @@
 
           <br>
           <p>
-            EN CASO DE NO OBTENER RESULTADOS DE BUSQUEDA, PUEDE REGISTRAR UN ALUMNO NUEVO
+            EN CASO DE NO OBTENER RESULTADOS DE BUSQUEDA, PUEDE AGREGAR UN ESTUDIANTE NUEVO
           </p>
 
-          <v-btn color="primary" @click="goNewStudent"><v-icon left>person_add</v-icon> Agregar Alumno</v-btn>
+          <v-btn color="primary" @click="goNewStudent"><v-icon left>person_add</v-icon> Agregar Estudiante</v-btn>
         </v-container>
 
 
@@ -159,7 +159,6 @@
         return store.state.alumno
       },
       alumnos(){
-        console.log(store.getters.alumnos);
         return store.getters.alumnos
       }
     },
@@ -180,13 +179,11 @@
           .then(function (response) {
             // handle success
             vm.resultado = response.data.data;
-            console.log(response.data.data);
             vm.findPersonaRunning = false;
         })
           .catch(function (error) {
             // handle error
             vm.resultado = [];
-            console.log(error.response.data);
             vm.findPersonaRunning = false;
           });
       },
@@ -197,9 +194,7 @@
         router.go(-1);
       },
       goWithSelected:function(alumno){
-        console.log(alumno);
         store.dispatch('relateAlumnoFamiliars',alumno);
-        // router.push('/inscripciones/finalizar');
       }
     }
   }
