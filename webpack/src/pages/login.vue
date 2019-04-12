@@ -2,12 +2,8 @@
     <v-container fluid>
         <v-slide-y-transition mode="out-in">
             <v-layout column align-center>
-                <!-- <img src="@/assets/escudo_color.jpg" alt="SIEP-PWA" class="mb-5">
 
-                <v-subheader>
-                    Ingrese con las Redes Sociales
-                </v-subheader> -->
-                <v-carousel class="carousel" light active-class>
+                <v-carousel v-bind:class="{ 'carousel' : !isMobile, 'carousel-mobile' : isMobile}" light active-class hide-delimiters>
                   <v-carousel-item
                     v-for="(item,i) in items"
                     :key="i"
@@ -40,14 +36,8 @@
     },
     data(){
       return{
-        items: [
-          // {
-          //   src: require("@/assets/carousel/slide1.jpg")
-          // },
-          // {
-          //   src: require("@/assets/carousel/slide2.jpg")
-          // }
-        ],
+        isMobile:false,
+        items: [],
         color: '#5C6BC0',
         apigw: process.env.SIEP_API_GW_INGRESS,
       }
@@ -64,9 +54,16 @@
       }
     },
     mounted(){
-      
+      this.onResize();
     },
     methods:{
+      onResize(){
+        if(window.innerWidth <= 480){
+          this.isMobile = true;
+        }else{
+          this.isMobile = false;
+        }
+      },
       carouselImages(r) {
         // console.log(this.items)
       var imgs = {}
@@ -97,6 +94,10 @@
 
     .carousel {
       height: 250px !important;
+    }
+
+    .carousel-mobile {
+      height: 200px !important;
     }
 
 </style>
