@@ -14,7 +14,7 @@
     </v-breadcrumbs>
 
     <!-- Formulario de registro de persona-->
-    <form-persona alumno="true" mode="create" title="Alumno"/>
+    <form-persona alumno="true" mode="create" title="Estudiantes"/>
   </v-container>
 </template>
 

@@ -38,7 +38,7 @@
                 <v-divider class="my-3"></v-divider>
 
                 <v-flex>
-                  <v-btn class="mx-0" color="success" large @click="goToFamiliar('create')">
+                  <v-btn class="mx-0" color="success" large :block="isMobile" @click="goToFamiliar('create')">
                     <v-icon left>how_to_reg</v-icon>Completar perfil
                   </v-btn>
                 </v-flex>
@@ -49,14 +49,14 @@
                 <!-- EDICION DE PERSONA -->
                 
                 <v-flex>
-                  <v-btn class="mx-0" color="orange" dark large @click="goToFamiliar('update')">
+                  <v-btn class="mx-0" color="orange" dark large :block="isMobile" @click="goToFamiliar('update')">
                     <v-icon left>edit</v-icon>Editar  mi perfil
                   </v-btn>
                 </v-flex>
 
                 <v-flex>
-                  <v-btn class="mx-0" color="primary" large @click="goToStudent">
-                    <v-icon left>how_to_reg</v-icon>Agregar Alumno
+                  <v-btn class="mx-0" color="primary" large :block="isMobile" @click="goToStudent">
+                    <v-icon left>how_to_reg</v-icon>Agregar/Ver Estudiantes
                   </v-btn>
                 </v-flex>
               </div>
@@ -75,13 +75,14 @@
 
   export default {
     data: ()=>({
+      isMobile:false,
       personaUpdated:false
     }),
     created: function() {
       store.commit('updateTitle',"SIEP | Familiares");
     },
     mounted: function() {
-      
+      this.onResize();
     },
     computed: {
       user(){
@@ -102,6 +103,13 @@
       }
     },
     methods:{
+      onResize(){
+        if(window.innerWidth <= 480){
+          this.isMobile = true;
+        }else{
+          this.isMobile = false;
+        }
+      },
       goToLogin: function(){
         router.push('/')
       },
