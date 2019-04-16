@@ -40,8 +40,7 @@
         offset-y
         full-width
         max-width="290px"
-        min-width="290px"
-        :disabled="disabledOnUpdate">
+        min-width="290px">
         <v-text-field
             slot="activator"
             v-model="computedDateFormatted"

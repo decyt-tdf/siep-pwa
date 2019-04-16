@@ -1,5 +1,8 @@
 <template>
     <v-container fluid text-xs-center>
+      <!-- Dialog -->
+      <vuetify-dialog :dialogProps='dialogProps'/>
+      <!-- /Dialog -->
       
       <div v-if="!user.loggedIn && !user.apiGetUserDataRunning">
               <p class="subheading">Por favor, inicie sesion para acceder a esta sección.</p>
@@ -28,13 +31,21 @@
 <script>
   import axios from 'axios'
   import router from '../router'
+  import VuetifyDialog from '../components/VuetifyDialog.vue'
 
-  export default{
+
+  export default {
+    components:{ VuetifyDialog },
     data: ()=>({
       alert:{},
       sending:false,
       form:{},
-      text_message: "Redacte un Mensaje"
+      text_message: "Redacte un Mensaje",
+      dialogProps:{
+        show:false,
+        title:"IMPORTANTE",
+        message:"Solo se recibirán consultas relacionadas con el uso de la aplicación. Para otras consultas, por favor contactese con la institución educativa correspondiente."
+      }
     }),
     computed:{
       user(){
@@ -43,7 +54,7 @@
     },
     created: function(){
       store.commit('updateTitle','SIEP | Contactenos');
-
+      setTimeout(() => this.dialogProps.show = true ,1000);
     },
     methods:{
       goToLogin:function(){

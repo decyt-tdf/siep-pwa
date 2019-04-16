@@ -6,6 +6,7 @@ import menu_toolbar from './model/menu_toolbar'
 
 import user from './model/user'
 import alert from './model/alert'
+import dialog from './model/dialog'
 
 // Inscripciones
 import inscripciones_home from './model/inscripciones/home'
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
     menu: menu,
     menu_toolbar: menu_toolbar,
     alert: alert,
+    dialog:dialog,
 
     user: user,
     home: inscripciones_home,
