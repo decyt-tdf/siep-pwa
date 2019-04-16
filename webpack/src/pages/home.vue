@@ -1,74 +1,97 @@
 <template>
+  <v-container >
+    <v-flex xs12 class="text-xs-center">
+      <v-progress-circular
+              :size="70"
+              :width="7"
+              color="orange"
+              indeterminate
+              v-if="user.apiGetUserDataRunning"
+      ></v-progress-circular>
 
-  <v-jumbotron>
-    <v-container fill-height>
-      <v-layout align-center>
-        
+      <div v-if="!user.loggedIn && !user.apiGetUserDataRunning">
+        <p class="subheading">Por favor, inicie sesion para acceder a esta sección.</p>
 
-        <v-flex xs12 class="text-xs-center">
-          <v-progress-circular
-                  :size="70"
-                  :width="7"
-                  color="orange"
-                  indeterminate
-                  v-if="user.apiGetUserDataRunning"
-          ></v-progress-circular>
+        <div class="text-xs-center">
+          <v-btn round color="primary" small @click="goToLogin">Quiero iniciar sesion</v-btn>
+        </div>
 
-          <div v-if="!user.loggedIn && !user.apiGetUserDataRunning">
-            <p class="subheading">Por favor, inicie sesion para acceder a esta sección.</p>
+      </div>
 
-            <div class="text-xs-center">
-              <v-btn round color="primary" small @click="goToLogin">Quiero iniciar sesion</v-btn>
-            </div>
+      <div v-if="user.loggedIn">
+        <h3 class="display-2 font-weight-bold" >Bienvenido!</h3>
 
-          </div>
+        <h3 v-if="persona" class="display-1">
+          {{persona.nombres }} {{persona.apellidos }}
+        </h3>
 
-          <div v-if="user.loggedIn">
-            <h3 class="display-2 font-weight-bold" >Bienvenido</h3>
+        <v-divider class="my-3"></v-divider>
 
-            <h3 v-if="persona" class="display-1">
-              {{persona.nombres }} {{persona.apellidos }}
-            </h3>
+        <div v-if="!persona" >
+          <p class="subheading">Por favor, ingrese su número de documento en el campo de búsqueda para vincular un perfíl ya creado.</p>
+          <v-text-field
+          v-model="documento_nro"
+          label="Ingrese su número de documento"
+          v-on:keyup.enter="startFindPersona"
+          ></v-text-field>
+          <v-btn color="primary" @click="startFindPersona" :loading="findPersonaRunning" :block="isMobile"><v-icon left>search</v-icon>Buscar Perfíl</v-btn>
 
-            <v-divider class="my-3"></v-divider>
-
-            <div v-if="!persona" >
-              <p class="subheading">Por favor, complete sus datos personales para poder continuar.</p>
-
-              <v-divider class="my-3"></v-divider>
-
-              <v-flex>
-                <v-btn class="mx-0" color="success" large :block="isMobile" @click="goToFamiliar('create')">
-                  <v-icon left>how_to_reg</v-icon>Completar perfil
-                </v-btn>
+          <!-- Resultados de busqueda -->
+          <v-container fluid grid-list-md>
+            <v-layout row wrap>
+              <v-flex
+                    v-for="res in resultado"
+                    :key="res.id"
+                    xs12 sm12 md3 lg3 xl6 mb-1
+                  >
+                <v-card>
+                  <v-layout fill-height>
+                    <v-flex xs12 text-xs-center flexbox>
+                      <v-card-text primary-title>
+                        <div>
+                          <h3>{{ res.nombres }} {{ res.apellidos}}</h3>
+                          <div>DNI: {{ res.documento_nro}}</div>
+                        </div>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-btn color="success" @click="goWithSelected(res)" :loading="vinculandoPerfil" :block="isMobile"><v-icon left>person</v-icon>Vincular Perfíl</v-btn>
+                      </v-card-actions>
+                    </v-flex>
+                  </v-layout>
+                </v-card>
               </v-flex>
-            </div>
-            <!-- EN CASO QUE LA PERSONA ESTE DEFINIDA -->
-            <div v-else>
+            </v-layout>
+          </v-container>
+          <p class="subheading">Si no se encontraron resultados, complete sus datos personales para poder continuar.</p>
 
-              <!-- EDICION DE PERSONA -->
-              
-              <v-flex>
-                <v-btn class="mx-0" color="orange" dark large :block="isMobile" @click="goToFamiliar('update')">
-                  <v-icon left>edit</v-icon>Editar  mi perfil
-                </v-btn>
-              </v-flex>
+          <v-flex>
+            <v-btn class="mx-0" color="success" :block="isMobile" @click="goToFamiliar('create')">
+              <v-icon left>how_to_reg</v-icon>Completar perfíl
+            </v-btn>
+          </v-flex>
+        </div>
+        <!-- EN CASO QUE LA PERSONA ESTE DEFINIDA -->
+        <div v-else>
 
-              <v-flex>
-                <v-btn class="mx-0" color="primary" large :block="isMobile" @click="goToStudent">
-                  <v-icon left>how_to_reg</v-icon>Agregar/Ver Estudiantes
-                </v-btn>
-              </v-flex>
-            </div>
+          <!-- EDICION DE PERSONA -->
+          
+          <v-flex>
+            <v-btn class="mx-0" color="orange" dark large :block="isMobile" @click="goToFamiliar('update')">
+              <v-icon left>edit</v-icon>Editar  mi perfil
+            </v-btn>
+          </v-flex>
 
-          </div>
+          <v-flex>
+            <v-btn class="mx-0" color="primary" large :block="isMobile" @click="goToStudent">
+              <v-icon left>how_to_reg</v-icon>Agregar/Ver Estudiantes
+            </v-btn>
+          </v-flex>
+        </div>
 
-        </v-flex>
+      </div>
 
-      </v-layout>
-    </v-container>
-  </v-jumbotron>
-
+    </v-flex>
+  </v-container>
 </template>
 <script>
   import router from '../router'
@@ -77,6 +100,10 @@
     data: ()=>({
       isMobile:false,
       personaUpdated:false,
+      resultado:[],
+      documento_nro:"",
+      findPersonaRunning: false,
+      vinculandoPerfil:false,
       
     }),
     created: function() {
@@ -118,6 +145,13 @@
       goToStudent:function(){
         router.push('/inscripciones')
       },
+      goWithSelected:function(persona){
+        persona = _.omitBy(persona, _.isEmpty);
+        persona.ciudad = persona.ciudad.nombre;
+        console.log(persona);
+        this.vinculandoPerfil = true;
+        store.dispatch('apiCreatePersona',persona);
+      },
       createFamiliar: function(persona){
         this.personaUpdated = true;
         var pers = persona;
@@ -133,7 +167,27 @@
           pers.vinculo = "Madre";
         }
         store.dispatch('apiCreatePersona',pers);
-      }
+      },
+      startFindPersona:function(){
+        let vm = this;
+        vm.findPersonaRunning = true;
+        vm.resultado = [];
+        
+        store.dispatch('apiFindPersona',{
+          documento_nro:this.documento_nro,
+          familiar:1
+        })
+          .then(function (response) {
+            // handle success
+            vm.resultado = response.data.data;
+            vm.findPersonaRunning = false;
+        })
+          .catch(function (error) {
+            // handle error
+            vm.resultado = [];
+            vm.findPersonaRunning = false;
+          });
+      },
     }
   }
 </script>
