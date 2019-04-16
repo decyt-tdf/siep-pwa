@@ -1,8 +1,5 @@
 <template>
   <v-app>
-
-    
-
     <!-- Sidebar !-->
     <v-navigation-drawer
       persistent
@@ -28,6 +25,7 @@
 
     <!-- Contenido de navegacion !-->
     <v-content>
+
       <!-- Alert Message -->
       <v-alert
         :value="alert.show"
@@ -36,6 +34,7 @@
       >
         {{ alert.message }}
       </v-alert>
+      <!-- /Alert Message -->
       <transition-page>
         <router-view/>
       </transition-page>
@@ -63,9 +62,8 @@
   import MenuSidebar from './components/menu_sidebar.vue'
   import TransitionPage from './components/TransitionPage.vue'
 
-
   export default {
-    components: { UserSidebar, MenuSidebar, TransitionPage},
+    components: { UserSidebar, MenuSidebar, TransitionPage },
     data () {
       return {
         drawer: false,
@@ -85,7 +83,7 @@
     watch:{
       alert(newValue,oldValue) {
         setTimeout(() => newValue.show = false, 3000);
-      }
+      },
     },
     created(){
       console.log('APP Created');
