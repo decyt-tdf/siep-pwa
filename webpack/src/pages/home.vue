@@ -5,65 +5,65 @@
       <v-layout align-center>
         
 
-          <v-flex xs12 class="text-xs-center">
-            <v-progress-circular
-                    :size="70"
-                    :width="7"
-                    color="orange"
-                    indeterminate
-                    v-if="user.apiGetUserDataRunning"
-            ></v-progress-circular>
+        <v-flex xs12 class="text-xs-center">
+          <v-progress-circular
+                  :size="70"
+                  :width="7"
+                  color="orange"
+                  indeterminate
+                  v-if="user.apiGetUserDataRunning"
+          ></v-progress-circular>
 
-            <div v-if="!user.loggedIn && !user.apiGetUserDataRunning">
-              <p class="subheading">Por favor, inicie sesion para acceder a esta sección.</p>
+          <div v-if="!user.loggedIn && !user.apiGetUserDataRunning">
+            <p class="subheading">Por favor, inicie sesion para acceder a esta sección.</p>
 
-              <div class="text-xs-center">
-                <v-btn round color="primary" small @click="goToLogin">Quiero iniciar sesion</v-btn>
-              </div>
-
+            <div class="text-xs-center">
+              <v-btn round color="primary" small @click="goToLogin">Quiero iniciar sesion</v-btn>
             </div>
 
-            <div v-if="user.loggedIn">
-              <h3 class="display-2 font-weight-bold" >Bienvenido</h3>
+          </div>
 
-              <h3 v-if="persona" class="display-1">
-                {{persona.nombres }} {{persona.apellidos }}
-              </h3>
+          <div v-if="user.loggedIn">
+            <h3 class="display-2 font-weight-bold" >Bienvenido</h3>
+
+            <h3 v-if="persona" class="display-1">
+              {{persona.nombres }} {{persona.apellidos }}
+            </h3>
+
+            <v-divider class="my-3"></v-divider>
+
+            <div v-if="!persona" >
+              <p class="subheading">Por favor, complete sus datos personales para poder continuar.</p>
 
               <v-divider class="my-3"></v-divider>
 
-              <div v-if="!persona" >
-                <p class="subheading">Por favor, complete sus datos personales para poder continuar.</p>
+              <v-flex>
+                <v-btn class="mx-0" color="success" large :block="isMobile" @click="goToFamiliar('create')">
+                  <v-icon left>how_to_reg</v-icon>Completar perfil
+                </v-btn>
+              </v-flex>
+            </div>
+            <!-- EN CASO QUE LA PERSONA ESTE DEFINIDA -->
+            <div v-else>
 
-                <v-divider class="my-3"></v-divider>
+              <!-- EDICION DE PERSONA -->
+              
+              <v-flex>
+                <v-btn class="mx-0" color="orange" dark large :block="isMobile" @click="goToFamiliar('update')">
+                  <v-icon left>edit</v-icon>Editar  mi perfil
+                </v-btn>
+              </v-flex>
 
-                <v-flex>
-                  <v-btn class="mx-0" color="success" large :block="isMobile" @click="goToFamiliar('create')">
-                    <v-icon left>how_to_reg</v-icon>Completar perfil
-                  </v-btn>
-                </v-flex>
-              </div>
-              <!-- EN CASO QUE LA PERSONA ESTE DEFINIDA -->
-              <div v-else>
-
-                <!-- EDICION DE PERSONA -->
-                
-                <v-flex>
-                  <v-btn class="mx-0" color="orange" dark large :block="isMobile" @click="goToFamiliar('update')">
-                    <v-icon left>edit</v-icon>Editar  mi perfil
-                  </v-btn>
-                </v-flex>
-
-                <v-flex>
-                  <v-btn class="mx-0" color="primary" large :block="isMobile" @click="goToStudent">
-                    <v-icon left>how_to_reg</v-icon>Agregar/Ver Estudiantes
-                  </v-btn>
-                </v-flex>
-              </div>
-
+              <v-flex>
+                <v-btn class="mx-0" color="primary" large :block="isMobile" @click="goToStudent">
+                  <v-icon left>how_to_reg</v-icon>Agregar/Ver Estudiantes
+                </v-btn>
+              </v-flex>
             </div>
 
-          </v-flex>
+          </div>
+
+        </v-flex>
 
       </v-layout>
     </v-container>
@@ -76,7 +76,8 @@
   export default {
     data: ()=>({
       isMobile:false,
-      personaUpdated:false
+      personaUpdated:false,
+      
     }),
     created: function() {
       store.commit('updateTitle',"SIEP | Familiares");
@@ -89,7 +90,6 @@
         return store.state.user
       },
       persona(){
-        console.log("tengo persona");
         return store.getters.persona;
       }
     },
@@ -98,7 +98,6 @@
         if(!this.personaUpdated){
           this.createFamiliar(value);
         }else{
-          console.log("Ya está actualizado");
         }
       }
     },
@@ -122,7 +121,6 @@
       createFamiliar: function(persona){
         this.personaUpdated = true;
         var pers = persona;
-        console.log("Holaaaaa",pers);
         pers = _.omitBy(pers, _.isEmpty);
         pers.vinculo
         pers._method = "POST";
@@ -134,7 +132,6 @@
         }else{
           pers.vinculo = "Madre";
         }
-        console.log("Cambiado",pers);
         store.dispatch('apiCreatePersona',pers);
       }
     }
