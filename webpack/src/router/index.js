@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import login from '@/pages/login'
 import home from '@/pages/home'
 import inscripciones_home from '@/pages/inscripciones/home'
+import contacto from '@/pages/contacto'
 import alumno from '@/pages/inscripciones/alumno'
 import instituciones from '@/pages/inscripciones/instituciones'
 import familiar from '@/pages/inscripciones/familiar'
@@ -23,6 +24,11 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: home
+    },
+    {
+      path: '/contacto',
+      name: 'contacto',
+      component: contacto
     },
     {
       path: '/inscripciones',

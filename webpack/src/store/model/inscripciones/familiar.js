@@ -2,6 +2,7 @@
 
 const module = {
   state: {
+    vinculo:"",
     nombres: "",
     apellidos: "",
     fecha_nac:"",
@@ -47,6 +48,9 @@ const module = {
     },
     update_comentarios(state,valor){
       state.comentarios = valor
+    },
+    update_vinculo(state,vinculo){
+      state.vinculo = vinculo
     }
   }
 };
