@@ -46,6 +46,23 @@ Vue.use(VueGoogleMaps, {
   }
 });
 
+// Vue Analytics
+import VueAnalytics from 'vue-analytics';
+
+const isProd = process.env.NODE_ENV === 'production';
+
+Vue.use(VueAnalytics,{
+  id:'UA-138532724-1',
+  router,
+  autoTracking:{
+    exception: true
+  },
+  debug:{
+    enabled: !isProd,
+    sendHitTask: isProd
+  }
+});
+
 /* eslint-disable no-new */
 new Vue({
   store,
