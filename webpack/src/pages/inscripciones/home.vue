@@ -1,7 +1,7 @@
 <template>
   <v-container>
       <v-flex xs12 class="text-xs-center">
-          <v-breadcrumbs>
+          <!-- <v-breadcrumbs>
               <v-icon slot="divider">forward</v-icon>
 
               <v-breadcrumbs-item
@@ -11,50 +11,109 @@
               >
                   {{ item.text }}
               </v-breadcrumbs-item>
-          </v-breadcrumbs>
+          </v-breadcrumbs> -->
 
       <v-divider />
 
       <v-text-field
               v-model="documento_nro"
-              label="Ingresar documento del alumno"
+              label="Ingresar documento del Estudiante"
+              v-on:keyup.enter="startFindPersona"
       ></v-text-field>
-      <v-btn color="primary" @click="startFindPersona" :loading="findPersonaRunning"><v-icon left>search</v-icon>Buscar</v-btn>
+      <v-btn color="primary" @click="startFindPersona" :loading="findPersonaRunning"><v-icon left>search</v-icon>Buscar Estudiante</v-btn>
 
       <!-- Resultados de busqueda -->
-      <v-data-iterator
-          :items="resultado"
-          content-tag="v-layout"
-          hide-actions
-          no-data-text=""
-      >
-        <v-card
-          slot="item"
-          slot-scope="props"
-        >
-          <v-card-title primary-title>
-            <div>
-              <h3 class="subheading mb-0">{{ props.item.nombres }} {{ props.item.apellidos}}</h3>
-              <div>DNI: {{ props.item.documento_nro}}</div>
-            </div>
-          </v-card-title>
-          <v-card-actions>
-            <v-btn color="success" @click="goWithSelected(props.item)"><v-icon left>person</v-icon>Seleccionar alumno</v-btn>
-          </v-card-actions>
-        </v-card>
+      <v-container fluid grid-list-md>
+        <v-layout row wrap>
+          <v-flex
+                v-for="res in resultado"
+                :key="res.id"
+                xs12 sm12 md3 lg3 xl6 mb-1
+              >
+            <v-card>
+              <v-layout fill-height>
+                <v-flex xs12 flexbox>
+                  <v-card-title primary-title>
+                    <div>
+                      <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3>
+                      <div>DNI: {{ res.documento_nro}}</div>
+                    </div>
+                  </v-card-title>
+                  <v-card-actions>
+                    <v-btn color="success" @click="goWithSelected(res)"><v-icon left>person</v-icon>Vincular Estudiante</v-btn>
+                  </v-card-actions>
+                </v-flex>
+              </v-layout>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
 
-      </v-data-iterator>
 
+      <v-divider v-if="alumnos.length" />
+      <!-- Resultados de Relaciones con Familiar -->
+      <v-container fluid grid-list-md v-if="alumnos.length">
+        <p >
+          AQUI DEBAJO SE LISTAN LOS ESTUDIANTES REGISTRADOS COMO FAMILIAR SUYO
+        </p>
+        <v-layout row wrap>
+        <!-- <v-data-iterator
+            :items="alumnos"
+            content-tag="v-layout"
+            hide-actions
+            no-data-text=""
+            column 
+        > -->
+          <v-flex
+            v-for="al in alumnos"
+            :key="al.id"
+            xs12 sm12 md3 lg3 xl6 mb-1
+          >
+
+          <v-card>
+            <v-layout fill-height>
+              <v-flex xs12 flexbox>
+              <v-card-text>
+                <div>
+                  <h3 class="subheading mb-0">{{ al.alumno.persona.nombres }} {{ al.alumno.persona.apellidos}}</h3>
+                  <div>DNI: {{ al.alumno.persona.documento_nro}}</div>
+                  <v-chip v-if="al.status === 'confirmada'" color="green" text-color="white">
+                    <v-avatar>
+                      <v-icon>check_circle</v-icon>
+                    </v-avatar>
+                    Confirmada
+                  </v-chip>
+                  <v-chip v-if="al.status === 'pendiente'" color="default" text-color="black">
+                    <v-avatar>
+                      <v-icon>schedule</v-icon>
+                    </v-avatar>
+                    Pendiente
+                  </v-chip>
+                  <v-chip v-if="al.status === 'revisar'" color="orange" text-color="white">
+                    <v-avatar>
+                      <v-icon>warning</v-icon>
+                    </v-avatar>
+                    Dirigirse a Institución
+                  </v-chip>
+                </div>
+              </v-card-text>
+              </v-flex>
+            </v-layout>
+          </v-card>
+          </v-flex>
+        <!-- </v-data-iterator> -->
+        </v-layout>
+      </v-container>
 
         <v-container>
           <v-divider />
 
           <br>
           <p>
-            En caso de no obtener resultados de busqueda, puede registrar un alumno nuevo
+            EN CASO DE NO OBTENER RESULTADOS DE BUSQUEDA, PUEDE AGREGAR UN ESTUDIANTE NUEVO
           </p>
 
-          <v-btn color="primary" @click="goNewStudent"><v-icon left>person_add</v-icon>Registrar Nuevo Alumno</v-btn>
+          <v-btn color="primary" @click="goNewStudent"><v-icon left>person_add</v-icon> Agregar Estudiante</v-btn>
         </v-container>
 
 
@@ -72,6 +131,7 @@
       documento_nro:"",
       findPersonaRunning: false,
       resultado:[],
+      form:{},
 
       breadcrumbs: [
         {
@@ -90,10 +150,20 @@
     }),
     created: function(){
       store.commit('updateTitle',"Inscripciones");
+      store.dispatch('apiGetAlumnosForFamiliar');
+    },
+    mounted:function(){
     },
     computed:{
       alumno(){
         return store.state.alumno
+      },
+      alumnos(){
+        return store.getters.alumnos
+      }
+    },
+    watch:{
+      alumnos(){
       }
     },
     methods:{
@@ -109,13 +179,11 @@
           .then(function (response) {
             // handle success
             vm.resultado = response.data.data;
-            console.log(response.data.data);
             vm.findPersonaRunning = false;
         })
           .catch(function (error) {
             // handle error
             vm.resultado = [];
-            console.log(error.response.data);
             vm.findPersonaRunning = false;
           });
       },
@@ -125,8 +193,8 @@
       goBack:function(){
         router.go(-1);
       },
-      goWithSelected:function(persona){
-        router.push('/inscripciones/finalizar');
+      goWithSelected:function(alumno){
+        store.dispatch('relateAlumnoFamiliars',alumno);
       }
     }
   }

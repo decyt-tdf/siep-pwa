@@ -1,35 +1,48 @@
 <template v-bind:style="{ backgroundColor: color}">
     <v-container fluid>
-        <v-slide-y-transition mode="out-in">
-            <v-layout column align-center>
-                <!-- <img src="@/assets/escudo_color.jpg" alt="SIEP-PWA" class="mb-5">
+      <v-slide-y-transition mode="out-in">
+          <v-layout column align-center>
 
-                <v-subheader>
-                    Ingrese con las Redes Sociales
-                </v-subheader> -->
-                <v-carousel class="carousel" light active-class>
-                  <v-carousel-item
-                    v-for="(item,i) in items"
-                    :key="i"
-                    :src="item.src"
-                  ></v-carousel-item>
-                </v-carousel>
+            <v-carousel v-bind:class="{ 'carousel' : !isMobile, 'carousel-mobile' : isMobile}" light active-class hide-delimiters>
+              <v-carousel-item
+                v-for= "(item,i) in items"
+                :key= "i"
+                :src= "item.src"
+                style="height: 100%"
+              > </v-carousel-item>
+            </v-carousel>
 
-                <v-divider></v-divider>
+            <v-divider></v-divider>
+            <v-flex pt-2 pb-2>
+              <v-card raised>
+                <v-card-title>
+                  <div>
+                    <h4>Familia, mediante esta aplicación podrán:</h4>
+                  </div>
+                  <div class="caption">
+                    - Agregar/Editar sus datos personales y el tipo de vínculo con el estudiante.<br>
+                    - Agregar/Ver estudiantes vinculados a ustedes.<br>
+                    - Contactarse para consultas referidas al uso de la aplicación.<br>
+                    - Consultar datos de todas las instituciones educativas en la provincia.
+                  </div>
+                </v-card-title>
+              </v-card>
+            </v-flex>
+            
+            <v-flex xs12 md12 lg12 xl12 class="text-xs-center">
+                <v-btn round color="indigo darken-3" dark @click="goTo('facebook')">Ingresar con facebook</v-btn>
+                <v-btn round color="red darken-1" dark @click="goTo('google')">Ingresar con Google</v-btn>
+            </v-flex>
 
-                <div class="text-xs-center">
-                    <v-btn round color="indigo darken-3" dark @click="goTo('facebook')">Ingresar con facebook</v-btn>
-                    <v-btn round color="red darken-1" dark @click="goTo('google')">Ingresar con Google</v-btn>
-                </div>
-
-            </v-layout>
-        </v-slide-y-transition>
+          </v-layout>
+      </v-slide-y-transition>
     </v-container>
 </template>
 <script>
 
   import FacebookIcon from "vue-material-design-icons/facebook.vue"
   import GoogleIcon from "vue-material-design-icons/google.vue"
+
 
   import router from '../router'
 
@@ -40,14 +53,8 @@
     },
     data(){
       return{
-        items: [
-          // {
-          //   src: require("@/assets/carousel/slide1.jpg")
-          // },
-          // {
-          //   src: require("@/assets/carousel/slide2.jpg")
-          // }
-        ],
+        isMobile:false,
+        items: [],
         color: '#5C6BC0',
         apigw: process.env.SIEP_API_GW_INGRESS,
       }
@@ -61,12 +68,26 @@
     computed:{
       user(){
         return store.state.user
+      },
+      dialog(){
+        console.log("Dialog",store.state.dialog.dialog);
+        return store.state.dialog.dialog;
       }
     },
     mounted(){
-      
+      this.onResize();
+    },
+    watch:{
+      dialog(){}
     },
     methods:{
+      onResize(){
+        if(window.innerWidth <= 480){
+          this.isMobile = true;
+        }else{
+          this.isMobile = false;
+        }
+      },
       carouselImages(r) {
         // console.log(this.items)
       var imgs = {}
@@ -96,7 +117,17 @@
     }
 
     .carousel {
-      height: 250px !important;
+      height: 250px;
+    }
+
+    .carousel-mobile {
+      height: 180px;
+    }
+
+    .v-jumbotron__image { 
+      height: 100% !important;
+      min-width: 50% !important;
+      max-width: 100% !important; 
     }
 
 </style>

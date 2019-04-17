@@ -2,11 +2,12 @@
   <v-flex>
     <!-- Vinculo -->
     <v-combobox
+            id="vinculo"
             v-if="familiar"
             v-model="form.vinculo"
             :items="items_vinculo"
             :rules="inputRules"
-            label="Vinculo"
+            label="Vinculo con el Estudiante"
             hint="Campo Requerido"
             required
     ></v-combobox>
@@ -56,39 +57,9 @@
             no-title
             @input="menu_date_picker = false"
             :max="new Date().toISOString().substr(0, 10)"
-            min="1950-01-01"
+            min="1940-01-01"
         ></v-date-picker>
     </v-menu>
-
-    <!--<v-menu-->
-            <!--ref="menu"-->
-            <!--:close-on-content-click="false"-->
-            <!--v-model="menu_date_picker"-->
-            <!--:nudge-right="40"-->
-            <!--lazy-->
-            <!--transition="scale-transition"-->
-            <!--offset-y-->
-            <!--full-width-->
-            <!--min-width="290px"-->
-    <!--&gt;-->
-      <!--<v-text-field-->
-            <!--slot="activator"-->
-            <!--v-model="computedDateFormatted"-->
-            <!--label="Fecha de Nacimiento"-->
-            <!--hint="DD/MM/AAAA"-->
-            <!--persistent-hint-->
-            <!--prepend-icon="event"-->
-            <!--readonly-->
-      <!--&gt;</v-text-field>-->
-      <!--<v-date-picker-->
-            <!--ref="picker"-->
-            <!--v-model="form.fecha_nac"-->
-            <!--locale="es-ar"-->
-            <!--:max="new Date().toISOString().substr(0, 10)"-->
-            <!--min="1950-01-01"-->
-            <!--@change="save"-->
-      <!--&gt;</v-date-picker>-->
-    <!--</v-menu>-->
 
     <!-- Sexo -->
     <v-combobox
@@ -97,7 +68,7 @@
           :rules="inputRules"
           label="Sexo"
           hint="Campo Requerido"
-
+          :disabled="disabledOnUpdate"
           required
     ></v-combobox>
 
@@ -108,6 +79,7 @@
             :rules="inputRules"
             label="Tipo de Documento"
             hint="Campo Requerido"
+            :disabled="disabledOnUpdate"
             required
     ></v-combobox>
 
@@ -116,10 +88,12 @@
             v-model="form.documento_nro"
             :rules="inputRules"
             label="Número de Documento"
+            @blur="findDNI()"
             hint="Campo Requerido | Sin Puntos de separación"
             type="number"
             min="0"
             max="999999999"
+            :disabled="disabledOnUpdate"
             required
     ></v-text-field>
 
@@ -166,10 +140,8 @@
     <!-- Calle numero -->
     <v-text-field
             v-model="form.calle_nro"
-            :rules="inputRulesAlmostOne"
             label="Calle número"
             hint="Campo Requerido"
-            required
     ></v-text-field>
 
     <!-- Depto casa -->
@@ -188,15 +160,15 @@
             required
     ></v-text-field>
 
-    <!-- Comentario -->
-    <v-textarea
+    <!-- Comentario: por el momento está deshabilitado -->
+    <!-- <v-textarea
             v-model="form.observaciones"
             :label="texto_observacion"
             hint="Puede redactar otra observación de interés"
             color="primary"
             counter="100"
             v-bind:placeholder="observacion_placeholder"
-    ></v-textarea>
+    ></v-textarea> -->
 
     <v-btn color="primary" @click="goBack"><v-icon>navigate_before</v-icon> Volver</v-btn>
     <v-btn v-if="mode=='create'" color="light-green lighten-1" @click="createPersona">Guardar</v-btn>
@@ -210,6 +182,7 @@
   export default {
     props: ['familiar','alumno','mode','title'],
     data: ()=>({
+      disabledOnUpdate:false,
       inputRules: [
         v => !!v || 'Campo Requerido',
         v => (!v || v.length >= 3) || 'El campo debe tener más de 3 caracteres'
@@ -231,6 +204,7 @@
       texto_observacion: "Observación",
 
       form:{},
+      alerta:{},
 
       date: null,
       menu: false
@@ -241,6 +215,9 @@
       },
       computedDateFormatted () {
         return this.formatDate(this.form.fecha_nac)
+      },
+      getFamiliar() {
+        return this.familiar
       }
     },
     created: function(){
@@ -249,27 +226,33 @@
       this.observacionPlaceHolder();
 
       // Se debe setear el tipo de persona a dar de alta
-      if(this.familiar)
+      if(this.getFamiliar)
       {
-        this.form.familiar = 1;
-
         // MODO CREATE
-        if(this.mode=='create'){
+        if(this.mode == 'create'){
+          this.disabledOnUpdate = false;
           this.form.email = store.state.user.authApi.email;
         }
 
         // MODO UPDATE
-        if(this.mode=='update'){
+        if(this.mode == 'update'){
+          this.disabledOnUpdate = true;
           if(store.getters.persona) {
             this.form = store.getters.persona;
-            this.form.ciudad= this.form.ciudad.nombre;
+            this.form.ciudad = this.form.ciudad.nombre;
           }
         }
+
+        this.form.familiar = 1;
+        this.form.alumno = 0;
+
       }
 
       if(this.alumno)
       {
-        this.form.alumno= 1;
+        this.form.email = store.state.user.authApi.email;
+        this.form.alumno = 1;
+        this.form.familiar = 0;
         this.texto_observacion = 'Indique instituciones de preferencia';
       }
 
@@ -278,16 +261,101 @@
     watch: {
       menu_date_picker (val) {
         val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
+      },
+      'form.documento_nro'(){
+        if(this.disabledOnUpdate){
+          console.log("Está editando su perfíl");
+        }else{
+
+        }
       }
     },
     methods:{
       createPersona:function(){
-        this.form.pcia_nac ="esta";
-        this.form.nacionalidad ="esta";
-        store.dispatch('apiCreatePersona',this.form);
+        if(_.isEmpty(this.form.vinculo) && this.getFamiliar){
+          var options = {
+              container: '#vinculo',
+              easing: 'ease-in',
+              offset: -60,
+              force: true,
+              cancelable: true,
+              onStart: function(element) {
+                // scrolling started
+              },
+              onDone: function(element) {
+                // scrolling is done
+              },
+              onCancel: function() {
+                // scrolling has been interrupted
+              },
+              x: false,
+              y: true
+          }
+
+          cancelScroll = this.$scrollTo(element, duration, options)
+          this.alerta = {
+            class: "error",
+            message: "Debe completar el campo de Vinculo con el Estudiante",
+            show: true
+          };
+          store.dispatch('toggleAlertMessage',this.alerta);
+        }else{
+          this.form.pcia_nac ="esta";
+          this.form.nacionalidad ="esta";
+          this.form = _.omitBy(this.form, _.isEmpty);
+          this.form._method = "POST";
+          this.form.familiar = this.getFamiliar ? 1 : 0;
+          this.form.alumno = !this.getFamiliar ? 1 : 0;
+          store.dispatch('apiCreatePersona',this.form);
+        }
+        
       },
       updatePersona:function(){
-        store.dispatch('apiUpdatePersona',this.form);
+        if(_.isEmpty(this.form.vinculo) && this.getFamiliar){
+
+          var options = {
+              el: '#vinculo',
+              easing: 'ease-in-out',
+              offset: -60,
+              force: true,
+              cancelable: true,
+              onStart: function(element) {
+                // scrolling started
+              },
+              onDone: function(element) {
+                // scrolling is done
+              },
+              onCancel: function() {
+                // scrolling has been interrupted
+              },
+              x: false,
+              y: true
+          }
+
+          var cancelScroll = this.$scrollTo(300, options)
+
+          this.alerta = {
+            show: true,
+            class: "error",
+            message: "Debe completar el campo de Vinculo"
+          };
+          store.dispatch('toggleAlertMessage',this.alerta);
+        }else{
+          this.form.pcia_nac ="esta";
+          this.form.nacionalidad ="esta";
+          this.form = _.omitBy(this.form, _.isEmpty);
+          this.form.familiar = this.getFamiliar ? 1 : 0;
+          this.form.alumno = !this.getFamiliar ? 1 : 0,
+          this.form._method = "PUT";
+          store.dispatch('apiUpdatePersona',this.form);
+        }
+        
+      },
+      findDNI:function(){
+        if(this.form.documento_nro.length > 6){
+          store.dispatch('apiFindDni',this.form.documento_nro);
+        }
+
       },
       goBack:function(){
         router.go(-1);
