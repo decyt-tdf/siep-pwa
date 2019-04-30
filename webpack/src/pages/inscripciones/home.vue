@@ -8,7 +8,6 @@
               indeterminate
               v-if="user.apiGetUserDataRunning"
       ></v-progress-circular>
-
       <v-text-field
               v-model="documento_nro"
               label="Ingresar documento del Estudiante"
@@ -43,7 +42,6 @@
         </v-layout>
       </v-container>
 
-
       <v-divider v-if="alumnos.length" />
       <!-- Resultados de Relaciones con Familiar -->
       <v-container fluid grid-list-md v-if="alumnos.length">
@@ -63,7 +61,6 @@
             :key="al.id"
             xs12 sm12 md3 lg3 xl6 mb-1
           >
-
           <v-card>
             <v-layout fill-height>
               <v-flex xs12 flexbox>
