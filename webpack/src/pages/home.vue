@@ -1,5 +1,5 @@
 <template>
-  <v-container >
+  <v-container>
     <v-flex xs12 class="text-xs-center">
       <v-progress-circular
               :size="70"
@@ -46,13 +46,13 @@
                   >
                 <v-card>
                   <v-layout fill-height>
-                    <v-flex xs12 text-xs-center flexbox>
-                      <v-card-text primary-title>
+                    <v-flex xs12 flexbox>
+                      <v-card-title primary-title>
                         <div>
-                          <h3>{{ res.nombres }} {{ res.apellidos}}</h3>
+                          <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3>
                           <div>DNI: {{ res.documento_nro}}</div>
                         </div>
-                      </v-card-text>
+                      </v-card-title>
                       <v-card-actions>
                         <v-btn color="success" @click="goWithSelected(res)" :loading="vinculandoPerfil" :block="isMobile"><v-icon left>person</v-icon>Vincular Perfíl</v-btn>
                       </v-card-actions>
@@ -146,24 +146,31 @@
         router.push('/inscripciones')
       },
       goWithSelected:function(persona){
-        persona = _.omitBy(persona, _.isEmpty);
+        console.log("antes de limpiar",persona);
+        persona = _.pickBy(persona, _.identity);
+        console.log("despues de limpiar Nulos",persona);
         persona.ciudad = persona.ciudad.nombre;
-        console.log(persona);
+        persona.familiar = 1;
+        if(persona.sexo === "Masculino" || persona.sexo === "MASCULINO"){
+          persona.vinculo = "Padre";
+        }else if(persona.sexo === "Femenino" || persona.sexo === "FEMENINO"){
+          persona.vinculo = "Madre";
+        }
         this.vinculandoPerfil = true;
         store.dispatch('apiCreatePersona',persona);
       },
       createFamiliar: function(persona){
         this.personaUpdated = true;
         var pers = persona;
-        pers = _.omitBy(pers, _.isEmpty);
+        pers = _.pickBy(pers, _.identity);
         pers.vinculo
         pers._method = "POST";
         pers.familiar = 1;
         pers.ciudad = pers.ciudad.nombre;
         pers.alumno = 0;
-        if(pers.sexo === "Masculino"){
+        if(pers.sexo === "Masculino" || pers.sexo === "MASCULINO"){
           pers.vinculo = "Padre";
-        }else{
+        }else if(pers.sexo === "Femenino" || pers.sexo === "FEMENINO"){
           pers.vinculo = "Madre";
         }
         store.dispatch('apiCreatePersona',pers);
@@ -174,12 +181,12 @@
         vm.resultado = [];
         
         store.dispatch('apiFindPersona',{
-          documento_nro:this.documento_nro,
-          familiar:1
+          documento_nro:this.documento_nro
         })
           .then(function (response) {
             // handle success
             vm.resultado = response.data.data;
+            console.log(vm.resultado);
             vm.findPersonaRunning = false;
         })
           .catch(function (error) {
