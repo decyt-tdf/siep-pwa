@@ -1,20 +1,13 @@
 <template>
   <v-container>
       <v-flex xs12 class="text-xs-center">
-          <!-- <v-breadcrumbs>
-              <v-icon slot="divider">forward</v-icon>
-
-              <v-breadcrumbs-item
-                      v-for="item in breadcrumbs"
-                      :disabled="item.disabled"
-                      :key="item.text"
-              >
-                  {{ item.text }}
-              </v-breadcrumbs-item>
-          </v-breadcrumbs> -->
-
-      <v-divider />
-
+         <v-progress-circular
+              :size="70"
+              :width="7"
+              color="orange"
+              indeterminate
+              v-if="user.apiGetUserDataRunning"
+      ></v-progress-circular>
       <v-text-field
               v-model="documento_nro"
               label="Ingresar documento del Estudiante"
@@ -49,7 +42,6 @@
         </v-layout>
       </v-container>
 
-
       <v-divider v-if="alumnos.length" />
       <!-- Resultados de Relaciones con Familiar -->
       <v-container fluid grid-list-md v-if="alumnos.length">
@@ -69,7 +61,6 @@
             :key="al.id"
             xs12 sm12 md3 lg3 xl6 mb-1
           >
-
           <v-card>
             <v-layout fill-height>
               <v-flex xs12 flexbox>
@@ -77,24 +68,34 @@
                 <div>
                   <h3 class="subheading mb-0">{{ al.alumno.persona.nombres }} {{ al.alumno.persona.apellidos}}</h3>
                   <div>DNI: {{ al.alumno.persona.documento_nro}}</div>
-                  <v-chip v-if="al.status === 'confirmada'" color="green" text-color="white">
-                    <v-avatar>
-                      <v-icon>check_circle</v-icon>
-                    </v-avatar>
-                    Confirmada
-                  </v-chip>
-                  <v-chip v-if="al.status === 'pendiente'" color="default" text-color="black">
-                    <v-avatar>
-                      <v-icon>schedule</v-icon>
-                    </v-avatar>
-                    Pendiente
-                  </v-chip>
-                  <v-chip v-if="al.status === 'revisar'" color="orange" text-color="white">
-                    <v-avatar>
-                      <v-icon>warning</v-icon>
-                    </v-avatar>
-                    Dirigirse a Institución
-                  </v-chip>
+                  <div>
+                    <v-chip v-if="al.status === 'confirmada'" color="green" text-color="white">
+                      <v-avatar>
+                        <v-icon>check_circle</v-icon>
+                      </v-avatar>
+                      Confirmada
+                    </v-chip>
+                    <v-chip v-if="al.status === 'pendiente'" color="default" text-color="black">
+                      <v-avatar>
+                        <v-icon>schedule</v-icon>
+                      </v-avatar>
+                      Pendiente
+                    </v-chip>
+                    <v-chip v-if="al.status === 'revisar'" color="orange" text-color="white">
+                      <v-avatar>
+                        <v-icon>warning</v-icon>
+                      </v-avatar>
+                      Dirigirse a Institución
+                    </v-chip>
+                  </div>
+                  <div>
+                    <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
+                      <v-icon>visibility</v-icon>
+                    </v-btn>
+                    <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
+                      <v-icon>edit</v-icon>
+                    </v-btn>
+                  </div>
                 </div>
               </v-card-text>
               </v-flex>
@@ -155,6 +156,9 @@
     mounted:function(){
     },
     computed:{
+      user(){
+        return store.state.user
+      },
       alumno(){
         return store.state.alumno
       },
