@@ -26,15 +26,13 @@
             <v-card>
               <v-layout fill-height>
                 <v-flex xs12 flexbox>
-                  <v-card-title primary-title>
+                  <v-card-text>
                     <div>
                       <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3>
                       <div>DNI: {{ res.documento_nro}}</div>
                     </div>
-                  </v-card-title>
-                  <v-card-actions>
                     <v-btn color="success" @click="goWithSelected(res)"><v-icon left>person</v-icon>Vincular Estudiante</v-btn>
-                  </v-card-actions>
+                  </v-card-text>
                 </v-flex>
               </v-layout>
             </v-card>
