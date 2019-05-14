@@ -68,7 +68,6 @@
           :rules="inputRules"
           label="Sexo"
           hint="Campo Requerido"
-          :disabled="disabledOnUpdate"
           required
     ></v-combobox>
 
@@ -79,7 +78,6 @@
             :rules="inputRules"
             label="Tipo de Documento"
             hint="Campo Requerido"
-            :disabled="disabledOnUpdate"
             required
     ></v-combobox>
 
