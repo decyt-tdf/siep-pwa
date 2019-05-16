@@ -67,7 +67,7 @@
         });
         vm.sending = true;
         // Header con token
-        console.log(vm.form);
+        // console.log(vm.form,vm.user);
         vm.form.origin = 'siep_pwa';
         curl.defaults.headers.common['Authorization'] = `Bearer ${vm.user.authToken}`;
         return curl.post('/api/v1/contacto',vm.form)
