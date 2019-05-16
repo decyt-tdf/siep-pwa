@@ -86,14 +86,15 @@
                       Dirigirse a Institución
                     </v-chip>
                   </div>
-                  <div>
+                  <!-- Por el momento no se pueden editar ni ver Alumnos -->
+                  <!-- <div>
                     <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
                       <v-icon>visibility</v-icon>
                     </v-btn>
                     <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
                       <v-icon>edit</v-icon>
                     </v-btn>
-                  </div>
+                  </div> -->
                 </div>
               </v-card-text>
               </v-flex>
