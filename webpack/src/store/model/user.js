@@ -7,6 +7,8 @@ const module = {
     authToken: null,
     authApi: {},
     apiGetUserDataRunning: false,
+    apiNeighborhoodFiltering:false,
+    neighborhoodApi:[],
     porcentaje_perfil: 0,
     isEdition: false,
     loggedIn: false,
@@ -17,7 +19,8 @@ const module = {
     persona: state => {
       return state.authApi.persona;
     },
-    alumnos: state => state.alumnos
+    alumnos: state => state.alumnos,
+    barriosApi: state => state.neighborhoodApi
     
   },
   mutations: {
@@ -37,6 +40,9 @@ const module = {
     },
     retrieveAlumnos(state,payload){
       state.alumnos = payload;
+    },
+    refillNeighborhood(state,payload){
+      state.neighborhoodApi = payload;
     }
   },
   actions: {
@@ -396,12 +402,33 @@ const module = {
       curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
 
       var response = curl.get('/api/personas',{
-        params: payload
+        params: {documento_nro:payload}
       });
 
       console.log(response);
 
       return response;
+    },
+    apiFilterNeighborhood: function({commit,state},payload){
+
+      const curl = axios.create({
+        baseURL: process.env.SIEP_API_GW_INGRESS
+      });
+      // Header con token
+      curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
+      state.apiNeighborhoodFiltering = true;
+      curl.get('/api/v1/barrios',{
+        params: payload
+      }).then(function(response){
+        let res = response.data.map(x => {
+          return x.nombre
+        });
+        commit('refillNeighborhood', res); 
+        state.apiNeighborhoodFiltering = false;
+      }).catch(function (error) {
+        // handle error
+        console.log(error);
+      });
     }
   }
 };
