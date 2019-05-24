@@ -124,6 +124,18 @@
             required
     ></v-combobox>
 
+    <!-- Barrio -->
+    <v-combobox
+            v-model="form.barrio"
+            :items="barriosApi"
+            :rules="inputRules"
+            label="Barrio donde vive"
+            hint="Campo Requerido"
+            :loading="user.apiNeighborhoodFiltering"
+            :disabled="user.apiNeighborhoodFiltering"
+            required
+    ></v-combobox>
+
       <v-subheader>Su domicilio actual es</v-subheader>
     <!-- Calle nombre -->
     <v-text-field
@@ -200,6 +212,8 @@
       items_localidad:["Rio Grande","Ushuaia","Tolhuin"],
       observacion_placeholder:"",
       texto_observacion: "Observación",
+      combo_barrios_searching:false,
+      combo_barrios_api:[],
 
       form:{},
       alerta:{},
@@ -216,6 +230,10 @@
       },
       getFamiliar() {
         return this.familiar
+      },
+      barriosApi(){
+        // console.log("Aqui los barrios: ",store.getters.barriosApi);
+        return store.getters.barriosApi;
       }
     },
     created: function(){
@@ -266,7 +284,11 @@
         }else{
 
         }
-      }
+      },
+      'form.ciudad'(){
+        this.fillNeighborhood();
+      },
+      barriosApi(){}
     },
     methods:{
       createPersona:function(){
@@ -377,9 +399,15 @@
           this.observacion_placeholder = "";
         }
       },
-      save (computedDateFormatted) {
+      save(computedDateFormatted) {
         this.$refs.menu.save(computedDateFormatted)
-      }
+      },
+      fillNeighborhood() {
+        if(this.form.barrio  && this.form.barrio.length > 0){
+          this.form.barrio = "";
+        }
+        store.dispatch('apiFilterNeighborhood',{ciudad:this.form.ciudad});
+      },
     }
   }
 </script>
