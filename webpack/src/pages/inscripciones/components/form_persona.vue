@@ -151,23 +151,20 @@
     <v-text-field
             v-model="form.calle_nro"
             label="Calle número"
-            hint="Campo Requerido"
     ></v-text-field>
 
     <!-- Depto casa -->
     <v-text-field
             v-model="form.depto_casa"
             label="Depto / Casa (letra o número)"
-            hint="Campo Requerido"
-            required
+          
     ></v-text-field>
 
     <!-- Tira edificio -->
     <v-text-field
             v-model="form.tira_edificio"
             label="Tira / Edificio (letra o número)"
-            hint="Campo Requerido"
-            required
+          
     ></v-text-field>
 
     <!-- Comentario: por el momento está deshabilitado -->
