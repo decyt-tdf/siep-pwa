@@ -28,8 +28,8 @@
                 <v-flex xs12 flexbox>
                   <v-card-text>
                     <div>
-                      <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3>
-                      <div>DNI: {{ res.documento_nro}}</div>
+                      <!-- <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3> -->
+                      <h3>DNI: {{ res.documento_nro}}</h3>
                     </div>
                     <v-btn color="success" @click="goWithSelected(res)"><v-icon left>person</v-icon>Vincular Estudiante</v-btn>
                   </v-card-text>
@@ -64,8 +64,8 @@
               <v-flex xs12 flexbox>
               <v-card-text>
                 <div>
-                  <h3 class="subheading mb-0">{{ al.alumno.persona.nombres }} {{ al.alumno.persona.apellidos}}</h3>
-                  <div>DNI: {{ al.alumno.persona.documento_nro}}</div>
+                  <!-- <h3 class="subheading mb-0">{{ al.alumno.persona.nombres }} {{ al.alumno.persona.apellidos}}</h3> -->
+                  <h3>DNI: {{ al.alumno.persona.documento_nro}}</h3>
                   <div>
                     <v-chip v-if="al.status === 'confirmada'" color="green" text-color="white">
                       <v-avatar>
@@ -86,15 +86,14 @@
                       Dirigirse a Institución
                     </v-chip>
                   </div>
-                  <!-- Por el momento no se pueden editar ni ver Alumnos -->
-                  <!-- <div>
+                  <div>
                     <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
                       <v-icon>visibility</v-icon>
                     </v-btn>
                     <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
                       <v-icon>edit</v-icon>
                     </v-btn>
-                  </div> -->
+                  </div>
                 </div>
               </v-card-text>
               </v-flex>
