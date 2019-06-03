@@ -31,7 +31,7 @@
                       <!-- <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3> -->
                       <h3>DNI: {{ res.documento_nro}}</h3>
                     </div>
-                    <v-btn color="success" @click="goWithSelected(res)"><v-icon left>person</v-icon>Vincular Estudiante</v-btn>
+                    <v-btn color="success" @click="goWithSelected(res)" :loading="vinculandoPerfil"><v-icon left>person</v-icon>Vincular Estudiante</v-btn>
                   </v-card-text>
                 </v-flex>
               </v-layout>
@@ -129,23 +129,9 @@
       apigw: process.env.SIEP_API_GW_INGRESS,
       documento_nro:"",
       findPersonaRunning: false,
+      vinculandoPerfil: false,
       resultado:[],
-      form:{},
-
-      breadcrumbs: [
-        {
-          text: 'Paso 1',
-          disabled: false
-        },
-        {
-          text: 'Paso 2',
-          disabled: false
-        },
-        {
-          text: 'Finalizado',
-          disabled: true
-        }
-      ]
+      form:{}
     }),
     created: function(){
       store.commit('updateTitle',"Inscripciones");
@@ -196,6 +182,7 @@
         router.go(-1);
       },
       goWithSelected:function(alumno){
+        this.vinculandoPerfil = true;
         store.dispatch('relateAlumnoFamiliars',alumno);
       }
     }
