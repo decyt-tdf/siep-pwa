@@ -146,9 +146,7 @@
         router.push('/inscripciones')
       },
       goWithSelected:function(persona){
-        console.log("antes de limpiar",persona);
         persona = _.pickBy(persona, _.identity);
-        console.log("despues de limpiar Nulos",persona);
         persona.ciudad = persona.ciudad.nombre;
         persona.familiar = 1;
         if(persona.sexo === "Masculino" || persona.sexo === "MASCULINO"){
@@ -186,7 +184,6 @@
           .then(function (response) {
             // handle success
             vm.resultado = response.data.data;
-            console.log(vm.resultado);
             vm.findPersonaRunning = false;
         })
           .catch(function (error) {
