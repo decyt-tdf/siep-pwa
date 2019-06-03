@@ -63,7 +63,6 @@ const module = {
     },
     // Usuario autenticado con exito, retorna datos de usuario desde api
     loginSuccess: function({state}){
-      console.log('user.loginSuccess()',state);
       state.loggedIn = true;
       router.push({
         path: '/home'
@@ -71,7 +70,6 @@ const module = {
     },
     // No existe token
     tokenMissing: function({state}){
-      console.log('User not logged in, token missing');
       state.loggedIn = false;
       router.push({
         path: '/'
@@ -125,7 +123,7 @@ const module = {
       // Header con token
       curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
 
-      var response = curl.get('/api/personas',{
+      var response = curl.get('/api/v1/personas',{
         params: payload
       });
 
@@ -145,7 +143,7 @@ const module = {
 
       // payload.familiar = payload.isFamiliar;
 
-      curl.post('/api/personas',createPersona)
+      curl.post('/api/v1/personas',createPersona)
         .then(function (response) {
           // handle success
           if(response.data.persona)
@@ -186,7 +184,7 @@ const module = {
       });
       // Header con token
       curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
-      curl.post('/api/personas/'+state.authApi.persona.id,payload)
+      curl.post('/api/v1/personas/'+state.authApi.persona.id,payload)
           .then(function (response) {
             // handle success
             console.log(response.data);
@@ -217,7 +215,6 @@ const module = {
           });
     },
     apiGetFamiliar:function({commit,dispatch,state},payload){
-      console.log("obteniendo Familiar..."+payload.familiar_id);
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
       });
@@ -225,7 +222,6 @@ const module = {
       curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
 
       curl.get('/api/v1/familiar/persona/'+payload.familiar_id).then(function(familiar){
-        console.log(familiar.data);
         var data = {
           'familiar_id': familiar.data.id,
           'persona_id':payload.persona_id,
@@ -259,7 +255,6 @@ const module = {
       
     },
     apiCreateFamiliar:function({commit,dispatch,state},payload){
-      console.log('user.apiCreateFamiliar',payload);
 
       if(!payload.observaciones){
         payload.observaciones = "N/A";
@@ -278,7 +273,6 @@ const module = {
       curl.post('/api/v1/familiar',payload)
         .then(function (response) {
           // handle success
-          console.log("Familiar: ",response.data);
           if(response.data.familiar.id){
             console.log("Familiar Creado!");
           } else {
@@ -291,7 +285,6 @@ const module = {
         });
     },
     apiCreateAlumno: function({commit,dispatch,state},payload){
-      console.log('user.apiCreateAlumno',payload);
 
       payload._method = "POST";
 
@@ -319,7 +312,6 @@ const module = {
         });
     },
     relateAlumnoFamiliars: function({commit,dispatch,state},alumno){
-      console.log('user.apiRelateAlumnoFamiliars',alumno);
 
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
@@ -328,7 +320,6 @@ const module = {
       curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
 
       curl.get('/api/v1/familiar/persona/'+state.authApi.persona.id).then(function(familiar){
-        console.log(familiar.data);
         var data = {
           'familiar_id': familiar.data.id,
           'persona_id':alumno.id,
@@ -344,7 +335,6 @@ const module = {
         curl.post('/api/v1/alumnos',alumno)
         .then(function (response) {
           // handle success
-          console.log(response.data);
           if(response.data.alumno.id){
             console.log("Alumno Creado!");
             data.alumno_id = response.data.alumno.id;
@@ -366,7 +356,6 @@ const module = {
 
     },
     apiCreateAlumnoFamiliars: function({commit,dispatch,state},payload){
-      console.log('user.apiCreateAlumnoFamiliars',payload);
 
       payload._method = "POST";
       payload.status = "pendiente";
@@ -379,7 +368,6 @@ const module = {
 
       curl.post('/api/v1/alumnos_familiars',payload)
         .then(function (response) {
-          console.log(response.data);
           // handle success
           if(response.data.alumnos_familiars.id){
             console.log("Relación Alumno-Familiar Creado!");
@@ -393,7 +381,6 @@ const module = {
         });
     },
     apiFindDni: function({state},payload){
-      console.log('user.apiFindDni',payload);
 
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
@@ -401,16 +388,13 @@ const module = {
       // Header con token
       curl.defaults.headers.common['Authorization'] = `Bearer ${state.authToken}`;
 
-      var response = curl.get('/api/personas',{
+      var response = curl.get('/api/v1/personas',{
         params: {documento_nro:payload}
       });
-
-      console.log(response);
 
       return response;
     },
     apiFilterNeighborhood: function({commit,state},payload){
-
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
       });
