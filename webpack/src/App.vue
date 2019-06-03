@@ -82,7 +82,7 @@
     },
     watch:{
       alert(newValue,oldValue) {
-        setTimeout(() => newValue.show = false, 3000);
+        setTimeout(() => newValue.show = false, 5000);
       },
     },
     created(){

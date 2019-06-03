@@ -34,7 +34,7 @@
           label="Ingrese su número de documento"
           v-on:keyup.enter="startFindPersona"
           ></v-text-field>
-          <v-btn color="primary" @click="startFindPersona" :loading="findPersonaRunning" :block="isMobile"><v-icon left>search</v-icon>Buscar Perfíl</v-btn>
+          <v-btn color="primary" @click="startFindPersona()" :loading="findPersonaRunning" :block="isMobile"><v-icon left>search</v-icon>Buscar Perfíl</v-btn>
 
           <!-- Resultados de busqueda -->
           <v-container fluid grid-list-md>
@@ -103,8 +103,7 @@
       resultado:[],
       documento_nro:"",
       findPersonaRunning: false,
-      vinculandoPerfil:false,
-      
+      vinculandoPerfil: false,
     }),
     created: function() {
       store.commit('updateTitle',"SIEP | Familiares");
@@ -146,6 +145,7 @@
         router.push('/inscripciones')
       },
       goWithSelected:function(persona){
+        this.vinculandoPerfil = true;
         persona = _.pickBy(persona, _.identity);
         persona.ciudad = persona.ciudad.nombre;
         persona.familiar = 1;
@@ -154,7 +154,6 @@
         }else if(persona.sexo === "Femenino" || persona.sexo === "FEMENINO"){
           persona.vinculo = "Madre";
         }
-        this.vinculandoPerfil = true;
         store.dispatch('apiCreatePersona',persona);
       },
       createFamiliar: function(persona){
