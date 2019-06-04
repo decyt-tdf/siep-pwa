@@ -99,6 +99,12 @@ const module = {
             })
             .catch(function (error) {
               // handle error
+              let alerta = {
+                show: true,
+                class: "error",
+                message: error
+              };
+              store.dispatch('toggleAlertMessage',alerta);
               console.log(error);
               dispatch('tokenMissing');
 
@@ -115,8 +121,6 @@ const module = {
       })*/
     },
     apiFindPersona: function({state},payload) {
-      console.log('user.apiFindPersona',payload);
-
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
       });
@@ -127,13 +131,9 @@ const module = {
         params: payload
       });
 
-
-      console.log(response);
-
       return response;
     },
     apiCreatePersona: function({commit,dispatch,state},createPersona) {
-      console.log('user.apiCreatePersona',createPersona);
 
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
@@ -148,7 +148,6 @@ const module = {
           // handle success
           if(response.data.persona)
           {
-            console.log("Payload esFamiliar?: ",createPersona)
             if(createPersona.familiar)
             { 
               console.log("Es Familiar");
@@ -156,8 +155,6 @@ const module = {
               dispatch("apiCreateFamiliar",createPersona);
               dispatch('apiGetUserData');
             } else {
-                console.log("Persona_id: ",response.data.persona.id)
-                console.log("AuthApi:Persona_id: ",state.authApi.persona_id)
                 createPersona.persona_id = response.data.persona.id;
                 createPersona.familiar_id = state.authApi.persona_id;
                 dispatch("apiGetFamiliar",createPersona);
@@ -172,12 +169,17 @@ const module = {
         })
         .catch(function (error) {
           // handle error
+          let alerta = {
+            show: true,
+            class: "error",
+            message: response.data.error
+          };
+          store.dispatch('toggleAlertMessage',alerta);
           console.log(error);
         });
 
     },
     apiUpdatePersona: function({commit,dispatch,state},payload) {
-      console.log('user.apiUpdatePersona',payload);
 
       const curl = axios.create({
         baseURL: process.env.SIEP_API_GW_INGRESS
@@ -187,7 +189,6 @@ const module = {
       curl.post('/api/v1/personas/'+state.authApi.persona.id,payload)
           .then(function (response) {
             // handle success
-            console.log(response.data);
             if(response.data.updated)
             {
               if(payload.familiar)
@@ -206,11 +207,23 @@ const module = {
                 });
               }
             } else {
+              let alerta = {
+                show: true,
+                class: "error",
+                message: response.data.error
+              };
+              store.dispatch('toggleAlertMessage',alerta);
               console.log(response.data);
             }
           })
           .catch(function (error) {
             // handle error
+            let alerta = {
+              show: true,
+              class: "error",
+              message: response.data.error
+            };
+            store.dispatch('toggleAlertMessage',alerta);
             console.log(error);
           });
     },
@@ -250,6 +263,12 @@ const module = {
       })
       .catch(function (error) {
         // handle error
+        let alerta = {
+          show: true,
+          class: "error",
+          message: error
+        };
+        store.dispatch('toggleAlertMessage',alerta);
         console.log(error);
       });
       
@@ -281,6 +300,12 @@ const module = {
         })
         .catch(function (error) {
           // handle error
+          let alerta = {
+            show: true,
+            class: "error",
+            message: error
+          };
+          store.dispatch('toggleAlertMessage',alerta);
           console.log("Algo pasó",error);
         });
     },
@@ -308,6 +333,12 @@ const module = {
         })
         .catch(function (error) {
           // handle error
+          let alerta = {
+            show: true,
+            class: "error",
+            message: error
+          };
+          store.dispatch('toggleAlertMessage',alerta);
           console.log(error);
         });
     },
@@ -349,6 +380,12 @@ const module = {
         })
         .catch(function (error) {
           // handle error
+          let alerta = {
+            show: true,
+            class: "error",
+            message: error
+          };
+          store.dispatch('toggleAlertMessage',alerta);
           console.log(error);
         });
         
@@ -377,6 +414,12 @@ const module = {
         })
         .catch(function (error) {
           // handle error
+          let alerta = {
+            show: true,
+            class: "error",
+            message: error
+          };
+          store.dispatch('toggleAlertMessage',alerta);
           console.log(error);
         });
     },

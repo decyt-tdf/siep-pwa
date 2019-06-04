@@ -178,8 +178,8 @@
     ></v-textarea> -->
 
     <v-btn color="primary" @click="goBack"><v-icon>navigate_before</v-icon> Volver</v-btn>
-    <v-btn v-if="mode=='create'" color="light-green lighten-1" @click="createPersona">Guardar</v-btn>
-    <v-btn v-if="mode=='update'" color="light-orange lighten-1" @click="updatePersona">Actualizar</v-btn>
+    <v-btn v-if="mode=='create'" color="light-green lighten-1" @click="createPersona" :loading="startWithPersona">Guardar</v-btn>
+    <v-btn v-if="mode=='update'" color="light-orange lighten-1" @click="updatePersona" :loading="startWithPersona">Actualizar</v-btn>
   </v-flex>
 </template>
 
@@ -212,6 +212,7 @@
       combo_barrios_searching:false,
       combo_barrios_api:[],
 
+      startWithPersona: false,
       form:{},
       alerta:{},
 
@@ -231,6 +232,9 @@
       barriosApi(){
         // console.log("Aqui los barrios: ",store.getters.barriosApi);
         return store.getters.barriosApi;
+      },
+      alert(){
+        return store.state.alert.alert;
       }
     },
     created: function(){
@@ -285,31 +289,19 @@
       'form.ciudad'(){
         this.fillNeighborhood();
       },
-      barriosApi(){}
+      barriosApi(){},
+      alert(){
+        if(store.state.alert.alert.show){
+          this.startWithPersona = false;
+          this.scrollTop();
+        }
+      }
     },
     methods:{
       createPersona:function(){
+        this.startWithPersona = true;
         if(_.isEmpty(this.form.vinculo) && this.getFamiliar){
-          var options = {
-              container: '#vinculo',
-              easing: 'ease-in',
-              offset: -60,
-              force: true,
-              cancelable: true,
-              onStart: function(element) {
-                // scrolling started
-              },
-              onDone: function(element) {
-                // scrolling is done
-              },
-              onCancel: function() {
-                // scrolling has been interrupted
-              },
-              x: false,
-              y: true
-          }
-
-          cancelScroll = this.$scrollTo(element, duration, options)
+          this.startWithPersona = false;
           this.alerta = {
             class: "error",
             message: "Debe completar el campo de Vinculo con el Estudiante",
@@ -328,29 +320,9 @@
         
       },
       updatePersona:function(){
+        this.startWithPersona = true;
         if(_.isEmpty(this.form.vinculo) && this.getFamiliar){
-
-          var options = {
-              el: '#vinculo',
-              easing: 'ease-in-out',
-              offset: -60,
-              force: true,
-              cancelable: true,
-              onStart: function(element) {
-                // scrolling started
-              },
-              onDone: function(element) {
-                // scrolling is done
-              },
-              onCancel: function() {
-                // scrolling has been interrupted
-              },
-              x: false,
-              y: true
-          }
-
-          var cancelScroll = this.$scrollTo(300, options)
-
+          this.startWithPersona = false;
           this.alerta = {
             show: true,
             class: "error",
@@ -405,6 +377,28 @@
         }
         store.dispatch('apiFilterNeighborhood',{ciudad:this.form.ciudad});
       },
+      scrollTop(){
+        var options = {
+              el: '#vinculo',
+              easing: 'ease-in-out',
+              offset: -60,
+              force: true,
+              cancelable: true,
+              onStart: function(element) {
+                // scrolling started
+              },
+              onDone: function(element) {
+                // scrolling is done
+              },
+              onCancel: function() {
+                // scrolling has been interrupted
+              },
+              x: false,
+              y: true
+          }
+
+          var cancelScroll = this.$scrollTo(300, options)
+      }
     }
   }
 </script>
