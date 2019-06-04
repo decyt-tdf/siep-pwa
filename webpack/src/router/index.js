@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 // Paginas
 import login from '@/pages/login'
+import mantenimiento from '@/pages/mantenimiento'
 import home from '@/pages/home'
 import inscripciones_home from '@/pages/inscripciones/home'
 import contacto from '@/pages/contacto'
@@ -17,8 +18,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'login',
-      component: login
+      name: window.location.hostname === 'https://familiares.sieptdf.org' ? 'login' : 'mantenimiento',
+      component: window.location.hostname === 'https://familiares.sieptdf.org' ? login : mantenimiento
     },
     {
       path: '/home',
