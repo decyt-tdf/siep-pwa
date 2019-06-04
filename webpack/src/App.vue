@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <v-container v-if="!maintenanceMode">
     <!-- Sidebar !-->
     <v-navigation-drawer
       persistent
@@ -53,7 +54,16 @@
         &copy; 2019 — <strong>Subsecretaría de Planeamiento Educativo, Informática y Evaluación</strong>
       </v-flex>
     </v-footer>
-
+    </v-container>
+    <v-container v-if="maintenanceMode">
+      <article>
+          <h1>Estarémos de vuelta muy pronto!</h1>
+          <div>
+              <p>Disculpe las molestias, estamos trabajando en el sitio en este momento. Si es necesario, puede contactarnos al correo <a href="mailto:#">sinide.tdf@gmail.com</a>, de igual manera, estaremos de nuevo online muy pronto!</p><br>
+              <p style="text-align:left !important;">&mdash; Equipo de SIEP</p>
+          </div>
+      </article>
+    </v-container>
   </v-app>
 </template>
 
@@ -67,7 +77,8 @@
     data () {
       return {
         drawer: false,
-        toolbar_disabled:true
+        toolbar_disabled: true,
+        maintenanceMode: false
       }
     },
     computed: {
@@ -88,11 +99,27 @@
     created(){
       console.log('APP Created');
       store.dispatch('extractToken');
+      this.verifyHost();
+    },
+    methods:{
+      verifyHost(){
+        if(window.location.hostname.includes('familiares')){
+          this.maintenanceMode = true;
+        }else{
+          console.log(window.location.hostname);
+          this.maintenanceMode = false;
+        }
+      }
     },
     name: 'App'
   }
 </script>
 <style>
-  
+  article { font-size: 20px; text-align: center; padding: 10px; }
+  /*h1 { font-size: 50px; }*/
+  body { font: Helvetica, sans-serif; color: #333; }
+  /*article { display: block; text-align: left; width: 650px; margin: 0 auto; }*/
+  a { color: #dc8100; text-decoration: none; }
+  a:hover { color: #333; text-decoration: none; }
 </style>
 
