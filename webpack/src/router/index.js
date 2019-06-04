@@ -3,7 +3,6 @@ import Router from 'vue-router'
 
 // Paginas
 import login from '@/pages/login'
-import mantenimiento from '@/pages/mantenimiento'
 import home from '@/pages/home'
 import inscripciones_home from '@/pages/inscripciones/home'
 import contacto from '@/pages/contacto'
@@ -15,11 +14,12 @@ import finalizar from '@/pages/inscripciones/finalizar'
 Vue.use(Router);
 
 export default new Router({
+  
   routes: [
     {
       path: '/',
-      name: window.location.hostname === 'https://familiares.sieptdf.org' ? 'login' : 'mantenimiento',
-      component: window.location.hostname === 'https://familiares.sieptdf.org' ? login : mantenimiento
+      name: 'login',
+      component: login
     },
     {
       path: '/home',
