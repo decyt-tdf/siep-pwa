@@ -28,7 +28,7 @@
                 <v-flex xs12 flexbox>
                   <v-card-text>
                     <div>
-                      <!-- <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3> -->
+                      <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3>
                       <h3>DNI: {{ res.documento_nro}}</h3>
                     </div>
                     <v-btn color="success" @click="goWithSelected(res)" :loading="vinculandoPerfil"><v-icon left>person</v-icon>Vincular Estudiante</v-btn>
