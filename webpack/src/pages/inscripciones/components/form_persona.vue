@@ -261,7 +261,7 @@
         }
 
         this.form.familiar = 1;
-        this.form.alumno = 0;
+        // this.form.alumno = 0;
 
       }
 
@@ -269,7 +269,7 @@
       {
         this.form.email = store.state.user.authApi.email;
         this.form.alumno = 1;
-        this.form.familiar = 0;
+        // this.form.familiar = 0;
         this.texto_observacion = 'Indique instituciones de preferencia';
       }
 
@@ -309,8 +309,8 @@
           };
           store.dispatch('toggleAlertMessage',this.alerta);
         }else{
-          this.form.pcia_nac ="esta";
-          this.form.nacionalidad ="esta";
+          this.form.pcia_nac ="N/A";
+          this.form.nacionalidad ="N/A";
           this.form = _.omitBy(this.form, _.isEmpty);
           this.form._method = "POST";
           this.form.familiar = this.getFamiliar ? 1 : 0;
@@ -330,8 +330,8 @@
           };
           store.dispatch('toggleAlertMessage',this.alerta);
         }else{
-          this.form.pcia_nac ="esta";
-          this.form.nacionalidad ="esta";
+          this.form.pcia_nac ="N/A";
+          this.form.nacionalidad ="N/A";
           this.form = _.omitBy(this.form, _.isEmpty);
           this.form.familiar = this.getFamiliar ? 1 : 0;
           this.form.alumno = !this.getFamiliar ? 1 : 0,

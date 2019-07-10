@@ -10,6 +10,8 @@ import alumno from '@/pages/inscripciones/alumno'
 import instituciones from '@/pages/inscripciones/instituciones'
 import familiar from '@/pages/inscripciones/familiar'
 import finalizar from '@/pages/inscripciones/finalizar'
+import administracion from '@/pages/administracion'
+import mantenimiento from '@/pages/mantenimiento'
 
 Vue.use(Router);
 
@@ -55,6 +57,17 @@ export default new Router({
       path: '/inscripciones/finalizar',
       name: 'inscripciones.finalizar',
       component: finalizar
+    },
+    {
+      path: '/administrar',
+      name: 'administrar',
+      component: administracion
+    },
+    {
+      path: '/mantenimiento',
+      name: 'mantenimiento',
+      component: mantenimiento
     }
+
   ]
 })
