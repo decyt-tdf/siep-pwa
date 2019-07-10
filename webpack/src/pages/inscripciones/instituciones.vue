@@ -252,8 +252,8 @@
       showCenterInfo(centro){
         let vm = this;
         vm.coords ={
-          latitud: centro.lng,
-          longitud: centro.lat
+          latitud: centro.lat,
+          longitud: centro.lng
         };
       },
 
