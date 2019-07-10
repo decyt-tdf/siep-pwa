@@ -12,7 +12,7 @@ const alumno = {
     },
     mutations: {
         retrieveAlumnos(state,payload){
-            state.alumnos = payload;
+            state.alumnos = payload.data;
         }
     },
     actions: {

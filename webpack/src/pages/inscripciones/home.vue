@@ -64,8 +64,8 @@
               <v-flex xs12 flexbox>
               <v-card-text>
                 <div>
-                  <!-- <h3 class="subheading mb-0">{{ al.alumno.persona.nombres }} {{ al.alumno.persona.apellidos}}</h3> -->
-                  <h3>DNI: {{ al.alumno.persona.documento_nro}}</h3>
+                  <h3 class="subheading mb-0">{{ al.nombres }} {{ al.apellidos}}</h3>
+                  <h3>DNI: {{ al.documento_nro}}</h3>
                   <div>
                     <v-chip v-if="al.status === 'confirmada'" color="green" text-color="white">
                       <v-avatar>

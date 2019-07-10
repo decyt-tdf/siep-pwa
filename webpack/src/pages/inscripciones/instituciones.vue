@@ -190,7 +190,7 @@
           baseURL: vm.apigw
         });
         vm.combo_ciudades_searching = true;
-        return curl.get('/api/public/app_familiares/v1/forms/ciudades')
+        return curl.get('/api/public/app_familiares/v1/ciudades')
           .then(function (response) {
             vm.combo_ciudades_api  = response.data.map(x => {
               return x.nombre
@@ -222,8 +222,8 @@
             let render = response.data.map(function(x) {
               let res ={
                 position:{
-                  lat: x.lng,
-                  lng: x.lat
+                  lat: x.lat,
+                  lng: x.lng
                 },
                 data:x
               };
