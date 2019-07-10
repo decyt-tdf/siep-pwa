@@ -47,10 +47,6 @@
   import router from '../router'
 
   export default {
-    created: function(){
-      store.commit('updateTitle',"SIEP | LogIn");
-      this.logout();
-    },
     data(){
       return{
         isMobile:false,
@@ -61,6 +57,7 @@
     },
     created: function(){
       store.commit('updateTitle',"SIEP | Familiares");
+      this.logout();
       this.carouselImages(require.context("@/assets/carousel", true, /\.jpg$/))
     },
     components :{ FacebookIcon,GoogleIcon  },
@@ -72,13 +69,22 @@
       dialog(){
         console.log("Dialog",store.state.dialog.dialog);
         return store.state.dialog.dialog;
-      }
+      },
+      // SE HARÁ EN FUTURAS ACTUALIZACIONES      
+      // administracion(){
+      //   if(store.state.administracion.administracion.en_mantenimiento === 1){
+      //     router.push('/mantenimiento');
+      //   }
+      //   return store.state.administracion.administracion;
+      // }
     },
     mounted(){
       this.onResize();
     },
     watch:{
       dialog(){}
+      // SE HARÁ EN FUTURAS ACTUALIZACIONES
+      // administracion(){}
     },
     methods:{
       onResize(){

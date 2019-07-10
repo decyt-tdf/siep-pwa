@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <v-container v-if="!maintenanceMode">
     <!-- Sidebar !-->
     <v-navigation-drawer
       persistent
@@ -8,6 +7,7 @@
       enable-resize-watcher
       fixed
       app
+      v-if="!maintenanceMode"
     >
       
       <!-- Componente UserSidebar -->
@@ -20,7 +20,7 @@
 
     <!-- Menu toolbar !-->
     <v-toolbar app color="orange darken-1" dark >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="!maintenanceMode"></v-toolbar-side-icon>
       <v-toolbar-title v-text="menu_toolbar.title" ></v-toolbar-title>
     </v-toolbar>
 
@@ -54,16 +54,6 @@
         &copy; 2019 — <strong>Subsecretaría de Planeamiento Educativo, Informática y Evaluación</strong>
       </v-flex>
     </v-footer>
-    </v-container>
-    <v-container v-if="maintenanceMode">
-      <article>
-          <h1>Estarémos de vuelta muy pronto!</h1>
-          <div>
-              <p>Disculpe las molestias, estamos trabajando en el sitio en este momento. Si es necesario, puede contactarnos al correo <a href="mailto:#">sinide.tdf@gmail.com</a>, de igual manera, estaremos de nuevo online muy pronto!</p><br>
-              <p style="text-align:left !important;">&mdash; Equipo de SIEP</p>
-          </div>
-      </article>
-    </v-container>
   </v-app>
 </template>
 
@@ -89,27 +79,31 @@
         console.log(store.state.alert.alert);
         return store.state.alert.alert;
       }
+      // Para más adelante
+      // administracion(){
+      //   if(store.state.administracion.administracion.en_mantenimiento === 1){
+      //     this.maintenanceMode = true;
+      //   }else{
+      //     this.maintenanceMode = false;
+      //   }
+      //   return store.state.administracion.administracion;
+      // }
       
     },
     watch:{
       alert(newValue,oldValue) {
         setTimeout(() => newValue.show = false, 5000);
       },
+      // Para más adelante
+      // administracion(){}
     },
     created(){
       console.log('APP Created');
       store.dispatch('extractToken');
-      this.verifyHost();
+      // SE HARÁ EN FUTURAS ACTUALIZACIONES
+      // store.dispatch('getAdministracionData');
     },
     methods:{
-      verifyHost(){
-        if(window.location.hostname.includes('familiares')){
-          this.maintenanceMode = true;
-        }else{
-          console.log(window.location.hostname);
-          this.maintenanceMode = false;
-        }
-      }
     },
     name: 'App'
   }

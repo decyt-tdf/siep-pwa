@@ -148,11 +148,23 @@
       },
       alumnos(){
         return store.getters.alumnos
+      },
+      familiar(){
+        return store.getters.familiar
       }
+      // SE HARÁ EN FUTURAS ACTUALIZACIONES
+      // administracion(){
+      //   if(store.state.administracion.administracion.en_mantenimiento === 1){
+      //     router.push('/mantenimiento');
+      //   }
+      //   return store.state.administracion.administracion;
+      // }
     },
     watch:{
-      alumnos(){
-      }
+      alumnos(){},
+      familiar(){}
+      // SE HARÁ EN FUTURAS ACTUALIZACIONES
+      // administracion(){}
     },
     methods:{
       startFindPersona:function(){

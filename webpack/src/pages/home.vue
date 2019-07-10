@@ -117,6 +117,12 @@
       },
       persona(){
         return store.getters.persona;
+      },
+      administracion(){
+        if(store.state.administracion.administracion.en_mantenimiento === 1){
+          router.push('/mantenimiento');
+        }
+        return store.state.administracion.administracion;
       }
     },
     watch:{
@@ -125,7 +131,8 @@
           this.createFamiliar(value);
         }else{
         }
-      }
+      },
+      administracion(){}
     },
     methods:{
       onResize(){
@@ -160,7 +167,7 @@
         this.personaUpdated = true;
         var pers = persona;
         pers = _.pickBy(pers, _.identity);
-        pers.vinculo
+        pers.vinculo;
         pers._method = "POST";
         pers.familiar = 1;
         pers.ciudad = pers.ciudad.nombre;
@@ -182,6 +189,7 @@
         })
           .then(function (response) {
             // handle success
+
             vm.resultado = response.data.data;
             vm.findPersonaRunning = false;
         })
