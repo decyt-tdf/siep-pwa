@@ -92,7 +92,7 @@ const module = {
                 class: "error",
                 message: error
               };
-              store.dispatch('toggleAlertMessage',alerta);
+              // store.dispatch('toggleAlertMessage',alerta);
               console.log(error);
               dispatch('tokenMissing');
 
