@@ -87,12 +87,13 @@
                     </v-chip>
                   </div>
                   <div>
-                    <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
+                    <!-- Esto es para más adelante  -->
+                    <!-- <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
                       <v-icon>visibility</v-icon>
                     </v-btn>
                     <v-btn v-if="al.status === 'confirmada'" color="info" fab small dark>
                       <v-icon>edit</v-icon>
-                    </v-btn>
+                    </v-btn> -->
                   </div>
                 </div>
               </v-card-text>
