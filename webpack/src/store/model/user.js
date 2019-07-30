@@ -107,6 +107,17 @@ const module = {
           resolve()
         }, 9000);
       })*/
+    },
+    apiGetCarouselImages:function(context,params){
+      const curl = axios.create({
+        baseURL: process.env.SIEP_API_GW_INGRESS
+      });
+
+      var response = curl.get('/api/public/v1/carousel',{
+        params: params
+      });
+
+      return response;
     }
     
   }
