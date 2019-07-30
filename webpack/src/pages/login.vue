@@ -14,7 +14,7 @@
       <v-slide-y-transition mode="out-in">
           <v-layout column align-center>
             
-            <v-carousel v-bind:class="{ 'carousel' : !isMobile, 'carousel-mobile' : isMobile}" light active-class hide-delimiters>
+            <v-carousel v-bind:class="{ 'carousel' : !isMobile, 'carousel-mobile' : isMobile}" light active-class hide-delimiters v-bind:hide-controls="isMobile">
               <v-carousel-item
                 v-for= "(item,i) in items"
                 :key= "i"
@@ -71,7 +71,7 @@
     created: function(){
       store.commit('updateTitle',"SIEP | Familiares");
       this.logout();
-      this.carouselImages();
+      
     },
     components :{ FacebookIcon,GoogleIcon, SemipolarSpinner },
     name: "login",
@@ -93,6 +93,7 @@
     },
     mounted(){
       this.onResize();
+      this.carouselImages();
     },
     watch:{
       dialog(){}
@@ -106,6 +107,7 @@
         }else{
           this.isMobile = false;
         }
+        console.log("Movil:",this.isMobile);
       },
       carouselImages(r) {
         var vm = this;
@@ -121,9 +123,11 @@
             desktop : 1
           }
         }
+        console.log("Params: ",params);
         store.dispatch('apiGetCarouselImages',params).then(function(response){
           vm.items = response.data;
-          setTimeout(() => vm.spinner = false, 2000);
+          console.log(vm.items);
+          setTimeout(() => vm.spinner = false, 4000);
         })
       },
       goTo : function(social){
