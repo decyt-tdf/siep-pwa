@@ -98,7 +98,7 @@ const familiar = {
       curl.post('/api/public/app_familiares/v1/familiares',payload)
         .then(function (response) {
           // handle success
-          if(response.data.familiar.id){
+          if(response.data.familiar){
             console.log("Familiar Creado!");
           } else {
             console.log("Algo pasó en la creación del familiar: ",response.data);
