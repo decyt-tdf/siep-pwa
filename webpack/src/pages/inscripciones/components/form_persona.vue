@@ -108,10 +108,17 @@
     <!-- Telefono nro -->
     <v-text-field
             v-model="form.telefono_nro"
-            :rules="inputRules"
+            :rules="telephoneRules"
             label="Teléfono"
             hint="Campo Requerido"
             required
+    ></v-text-field>
+
+    <!-- Telefono nro Alternativo-->
+    <v-text-field
+            v-model="form.telefono_nro_alt"
+            :rules="telephoneRules"
+            label="Teléfono Alternativo"
     ></v-text-field>
 
     <!-- Ciudad -->
@@ -140,9 +147,7 @@
     <!-- Calle nombre -->
     <v-text-field
             v-model="form.calle_nombre"
-            :rules="inputRules"
             label="Calle nombre"
-            hint="Campo Requerido"
             light
             required
     ></v-text-field>
@@ -168,14 +173,14 @@
     ></v-text-field>
 
     <!-- Comentario: por el momento está deshabilitado -->
-    <!-- <v-textarea
+    <v-textarea
             v-model="form.observaciones"
             :label="texto_observacion"
-            hint="Puede redactar otra observación de interés"
+            hint="Solo indique datos Personales Adicionales"
             color="primary"
             counter="100"
             v-bind:placeholder="observacion_placeholder"
-    ></v-textarea> -->
+    ></v-textarea>
 
     <v-btn color="primary" @click="goBack"><v-icon>navigate_before</v-icon> Volver</v-btn>
     <v-btn v-if="mode=='create'" color="light-green lighten-1" @click="createPersona" :loading="startWithPersona">Guardar</v-btn>
@@ -192,11 +197,16 @@
       disabledOnUpdate:false,
       inputRules: [
         v => !!v || 'Campo Requerido',
-        v => (!v || v.length >= 3) || 'El campo debe tener más de 3 caracteres'
+        v => (!v || v.length >= 3) || 'El campo debe tener más de 3 caracteres',
+        v => (!v || /^[ áÁéÉíÍóÓúÚ a-zA-ZñÑº()\- 0-9]{3,}$/.test(v)) || 'Sólo letras, números, guión medio y el caracter especial º.'
       ],
       inputRulesAlmostOne: [
         v => !!v || 'Campo Requerido',
         v => (!v || v.length >= 1) || 'El campo debe tener más de 1 caracter'
+      ],
+      telephoneRules:[
+        v => !!v || 'Campo Requerido',
+        v => (!v || /^[ 0-9() \-]{6,}$/.test(v) || 'Sólo números, guiones y espacios (mínimo 6 números).')
       ],
       emailRules: [
         v => !!v || 'Campo Requerido',
@@ -208,7 +218,7 @@
       items_sexo:["Masculino","Femenino"],
       items_localidad:["Rio Grande","Ushuaia","Tolhuin"],
       observacion_placeholder:"",
-      texto_observacion: "Observación",
+      texto_observacion: "Observaciónes",
       combo_barrios_searching:false,
       combo_barrios_api:[],
 
@@ -270,7 +280,7 @@
         this.form.email = store.state.user.authApi.email;
         this.form.alumno = 1;
         // this.form.familiar = 0;
-        this.texto_observacion = 'Indique instituciones de preferencia';
+        // this.texto_observacion = '';
       }
 
       // Permite la edicion de los datos del familiar
@@ -362,11 +372,11 @@
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
       },
       observacionPlaceHolder(){
-        if(this.familiar){
-          this.observacion_placeholder = "Si su hijo/a ya pertenece al sistema educativo pcial indique institución de preferencia";
-        }else{
-          this.observacion_placeholder = "";
-        }
+        // if(this.familiar){
+        //   this.observacion_placeholder = "Si su hijo/a ya pertenece al sistema educativo pcial indique institución de preferencia";
+        // }else{
+        //   this.observacion_placeholder = "";
+        // }
       },
       save(computedDateFormatted) {
         this.$refs.menu.save(computedDateFormatted)

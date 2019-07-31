@@ -101,6 +101,7 @@ const familiar = {
           if(response.data.familiar){
             console.log("Familiar Creado!");
           } else {
+            store.dispatch('toggleAlertMessage',alerta);
             console.log("Algo pasó en la creación del familiar: ",response.data);
           }
         })
