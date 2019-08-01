@@ -266,9 +266,13 @@
           this.disabledOnUpdate = true;
           if(store.getters.persona) {
             this.form = store.getters.persona;
-            this.form.ciudad = this.form.ciudad.nombre;
-            if(_.isNaN(this.form.barrio)){
-              console.log("no tengo barrio");
+            if(!_.has(this.form,'ciudad.nombre')){
+              this.form.barrio = {nombre:""};
+            }else{
+              this.form.ciudad = this.form.ciudad.nombre;
+            }
+            
+            if(!_.has(this.form,'barrio.nombre')){
               this.form.barrio = {nombre:""};
             }
             // this.form.barrio = this.form.barrio.nombre;
