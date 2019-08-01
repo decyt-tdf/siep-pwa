@@ -133,7 +133,7 @@
 
     <!-- Barrio -->
     <v-combobox
-            v-model="form.barrio"
+            v-model="form.barrio.nombre"
             :items="barriosApi"
             :rules="inputRules"
             label="Barrio donde vive"
@@ -231,6 +231,7 @@
     }),
     computed:{
       user(){
+        console.log(store.state.user);
         return store.state.user;
       },
       computedDateFormatted () {
@@ -240,7 +241,6 @@
         return this.familiar
       },
       barriosApi(){
-        // console.log("Aqui los barrios: ",store.getters.barriosApi);
         return store.getters.barriosApi;
       },
       alert(){
@@ -266,7 +266,17 @@
           this.disabledOnUpdate = true;
           if(store.getters.persona) {
             this.form = store.getters.persona;
-            this.form.ciudad = this.form.ciudad.nombre;
+            if(!_.has(this.form,'ciudad.nombre')){
+              this.form.barrio = {nombre:""};
+            }else{
+              this.form.ciudad = this.form.ciudad.nombre;
+            }
+            
+            if(!_.has(this.form,'barrio.nombre')){
+              this.form.barrio = {nombre:""};
+            }
+            // this.form.barrio = this.form.barrio.nombre;
+            // console.log("Form Persona: ",this.form);
           }
         }
 
@@ -325,6 +335,7 @@
           this.form._method = "POST";
           this.form.familiar = this.getFamiliar ? 1 : 0;
           this.form.alumno = !this.getFamiliar ? 1 : 0;
+          this.form.barrio = this.form.barrio.nombre;
           store.dispatch('apiCreatePersona',this.form);
         }
         
@@ -346,6 +357,7 @@
           this.form.familiar = this.getFamiliar ? 1 : 0;
           this.form.alumno = !this.getFamiliar ? 1 : 0,
           this.form._method = "PUT";
+          this.form.barrio = this.form.barrio.nombre;
           store.dispatch('apiUpdatePersona',this.form);
         }
         
