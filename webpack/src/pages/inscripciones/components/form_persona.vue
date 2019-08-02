@@ -271,7 +271,7 @@
             }else{
               this.form.ciudad = this.form.ciudad.nombre;
             }
-            
+
             if(!_.has(this.form,'barrio.nombre')){
               this.form.barrio = {nombre:""};
             }
@@ -291,6 +291,15 @@
         this.form.alumno = 1;
         // this.form.familiar = 0;
         // this.texto_observacion = '';
+        if(!_.has(this.form,'ciudad.nombre')){
+          this.form.barrio = {nombre:""};
+        }else{
+          this.form.ciudad = this.form.ciudad.nombre;
+        }
+        
+        if(!_.has(this.form,'barrio.nombre')){
+          this.form.barrio = {nombre:""};
+        }
       }
 
       // Permite la edicion de los datos del familiar
