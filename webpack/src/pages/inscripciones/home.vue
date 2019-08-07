@@ -3,22 +3,17 @@
       <v-dialog v-model="spinner" persistent content content-class="centered-dialog">
         <v-container fill-height>
           <v-layout column justify-center align-center>
-            <semipolar-spinner
-              :animation-duration="2000"
-              :size="60"
-              :color="'orange'"
-            />
-          </v-layout>
-        </v-container>
-      </v-dialog>
-      <v-flex xs12 class="text-xs-center">
-         <v-progress-circular
+            <v-progress-circular
               :size="70"
               :width="7"
               color="orange"
               indeterminate
-              v-if="user.apiGetUserDataRunning"
-      ></v-progress-circular>
+              v-if="spinner"
+            ></v-progress-circular>
+          </v-layout>
+        </v-container>
+      </v-dialog>
+      <v-flex xs12 class="text-xs-center">
       <v-text-field
               v-model="documento_nro"
               label="Ingresar documento del Estudiante"
@@ -135,10 +130,9 @@
 <script>
   import router from '../../router'
   import axios from 'axios'
-  import {SemipolarSpinner} from 'epic-spinners'
 
   export default {
-    components:{SemipolarSpinner},
+    components:{},
     data: ()=>({
       apigw: process.env.SIEP_API_GW_INGRESS,
       documento_nro:"",
