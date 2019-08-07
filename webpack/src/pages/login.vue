@@ -3,11 +3,13 @@
       <v-dialog v-model="spinner" persistent content content-class="centered-dialog">
         <v-container fill-height>
           <v-layout column justify-center align-center>
-            <semipolar-spinner
-              :animation-duration="2000"
-              :size="60"
-              :color="'orange'"
-            />
+            <v-progress-circular
+              :size="70"
+              :width="7"
+              color="orange"
+              indeterminate
+              v-if="spinner"
+            ></v-progress-circular>
           </v-layout>
         </v-container>
       </v-dialog>
@@ -53,7 +55,6 @@
 
   import FacebookIcon from "vue-material-design-icons/facebook.vue"
   import GoogleIcon from "vue-material-design-icons/google.vue"
-  import {SemipolarSpinner} from 'epic-spinners'
 
 
   import router from '../router'
@@ -73,7 +74,7 @@
       this.logout();
       
     },
-    components :{ FacebookIcon,GoogleIcon, SemipolarSpinner },
+    components :{ FacebookIcon,GoogleIcon },
     name: "login",
     computed:{
       user(){
