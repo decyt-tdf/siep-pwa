@@ -259,7 +259,7 @@
         if(this.mode == 'create'){
           this.disabledOnUpdate = false;
           this.form.email = store.state.user.authApi.email;
-          this.form.barrio = {nombre:""};
+          this.form.barrio = { nombre:"" };
         }
 
         // MODO UPDATE
