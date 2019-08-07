@@ -1,13 +1,20 @@
 <template>
   <v-container>
     <v-flex xs12 class="text-xs-center">
-      <v-progress-circular
+      <v-dialog v-model="user.apiGetUserDataRunning" persistent content content-class="centered-dialog">
+        <v-container fill-height>
+          <v-layout column justify-center align-center>
+            <v-progress-circular
               :size="70"
               :width="7"
               color="orange"
               indeterminate
               v-if="user.apiGetUserDataRunning"
-      ></v-progress-circular>
+            ></v-progress-circular>
+          </v-layout>
+        </v-container>
+      </v-dialog>
+      
 
       <div v-if="!user.loggedIn && !user.apiGetUserDataRunning">
         <p class="subheading">Por favor, inicie sesion para acceder a esta sección.</p>
@@ -101,6 +108,7 @@
       isMobile:false,
       personaUpdated:false,
       resultado:[],
+      spinner:true,
       documento_nro:"",
       findPersonaRunning: false,
       vinculandoPerfil: false,
