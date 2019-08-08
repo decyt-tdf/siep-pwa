@@ -58,10 +58,11 @@
 </template>
 
 <script>
+
   import UserSidebar from './components/user_sidebar.vue'
   import MenuSidebar from './components/menu_sidebar.vue'
   import TransitionPage from './components/TransitionPage.vue'
-
+  
   export default {
     components: { UserSidebar, MenuSidebar, TransitionPage },
     data () {

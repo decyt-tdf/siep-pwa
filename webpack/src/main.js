@@ -1,7 +1,24 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
+
+
 import Vue from 'vue'
 import App from './App'
+
+const { detect } = require('detect-browser');
+const browser = detect();
+
+// Chequeo el navegador para constatar que pueda tener soporte
+switch (browser && browser.name) {
+  case 'chrome':
+  case 'firefox':
+  case 'edge':
+    console.log('Navegador Soportado');
+    break;
+  default:
+    alert('Su navegador no soporta este sitio, para mejorar su experiencia utilice Google Chrome o actualice su navegador');
+}
 
 // Google Maps
 import * as VueGoogleMaps from "vue2-google-maps";
