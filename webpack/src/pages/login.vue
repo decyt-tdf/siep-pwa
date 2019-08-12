@@ -124,10 +124,8 @@
             desktop : 1
           }
         }
-        console.log("Params: ",params);
         store.dispatch('apiGetCarouselImages',params).then(function(response){
           vm.items = response.data;
-          console.log(vm.items);
           setTimeout(() => vm.spinner = false, 4000);
         })
       },
