@@ -24,6 +24,11 @@
       <!-- Resultados de busqueda -->
       <v-container fluid grid-list-md>
         <v-layout row wrap>
+          <div v-show="studentNotFound">
+            <p class="not_found">
+              EL NÚMERO DE DOCUMENTO INGRESADO NO PERTENECE A NINGÚN ALUMNO REGULAR
+            </p>
+          </div>
           <v-flex
                 v-for="res in resultado"
                 :key="res.id"
@@ -31,11 +36,12 @@
               >
             <v-card>
               <v-layout fill-height>
+                
                 <v-flex xs12 flexbox>
                   <v-card-text>
                     <div>
-                      <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h3>
-                      <h3>DNI: {{ res.documento_nro}}</h3>
+                      <h3 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos }}</h3>
+                      <h3>DNI: {{ res.documento_nro }}</h3>
                     </div>
                     <v-btn color="success" @click="goWithSelected(res)" :loading="vinculandoPerfil"><v-icon left>person</v-icon>Vincular Estudiante</v-btn>
                   </v-card-text>
@@ -45,11 +51,12 @@
           </v-flex>
         </v-layout>
       </v-container>
+      
 
       <v-divider v-if="alumnos.length" />
       <!-- Resultados de Relaciones con Familiar -->
       <v-container fluid grid-list-md v-if="alumnos.length">
-        <p >
+        <p class="descriptions">
           AQUI DEBAJO SE LISTAN LOS ESTUDIANTES REGISTRADOS COMO FAMILIAR SUYO
         </p>
         <v-layout row wrap>
@@ -115,7 +122,7 @@
           <v-divider />
 
           <br>
-          <p>
+          <p class="descriptions">
             EN CASO DE NO OBTENER RESULTADOS DE BUSQUEDA, PUEDE AGREGAR UN ESTUDIANTE NUEVO
           </p>
 
@@ -137,6 +144,7 @@
       apigw: process.env.SIEP_API_GW_INGRESS,
       documento_nro:"",
       findPersonaRunning: false,
+      studentNotFound:false,
       spinner:true,
       vinculandoPerfil: false,
       resultado:[],
@@ -178,9 +186,9 @@
     methods:{
       startFindPersona:function(){
         let vm = this;
+        vm.studentNotFound = false;
         vm.findPersonaRunning = true;
         vm.resultado = [];
-        
         store.dispatch('apiFindPersona',{
           documento_nro:this.documento_nro,
           alumno:1
@@ -189,11 +197,14 @@
             // handle success
             vm.resultado = response.data.data;
             vm.findPersonaRunning = false;
+            vm.verifyStudentFinded();
+
         })
           .catch(function (error) {
             // handle error
             vm.resultado = [];
             vm.findPersonaRunning = false;
+            vm.studentNotFound = false;
           });
       },
       goNewStudent:function(){
@@ -205,6 +216,15 @@
       goWithSelected:function(alumno){
         this.vinculandoPerfil = true;
         store.dispatch('relateAlumnoFamiliars',alumno);
+      },
+      verifyStudentFinded:function(){
+        let vm = this;
+        if(!vm.resultado.length){
+          vm.studentNotFound = true;
+          setTimeout(() => vm.studentNotFound = false, 5000);
+        }else{
+          vm.studentNotFound = false;
+        }
       }
     }
   }
@@ -219,5 +239,12 @@
     border-radius: 6px;
     width: auto;
     color: whitesmoke;
+  }
+
+  .not_found{
+    color: #ff5f00 /*ff8c00*/
+  }
+  .descriptions{
+    color: rgb(70, 78, 78);
   }
 </style>
