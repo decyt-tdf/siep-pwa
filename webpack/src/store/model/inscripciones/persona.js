@@ -63,9 +63,9 @@ const persona = {
                 if(createPersona.familiar)
                 { 
                     createPersona.persona_id = response.data.persona.id;
-                    dispatch("apiCreateFamiliar",createPersona).then(function(){
                     dispatch('apiGetUserData');
-                  });
+                    // dispatch("apiCreateFamiliar",createPersona).then(function(){
+                    // });
                 } else {
                     createPersona.persona_id = response.data.persona.id;
                     createPersona.familiar_id = store.state.user.authApi.persona_id;
@@ -96,6 +96,7 @@ const persona = {
             baseURL: process.env.SIEP_API_GW_INGRESS
           });
           // Header con token
+          console.log("apiUpdatePersona: ",payload);
           curl.defaults.headers.common['Authorization'] = `Bearer ${store.state.user.authToken}`;
           curl.post('/api/public/app_familiares/v1/personas/'+store.state.user.authApi.persona.id,payload)
               .then(function (response) {
