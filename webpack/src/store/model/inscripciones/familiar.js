@@ -84,7 +84,7 @@ const familiar = {
       if(!payload.observaciones){
         payload.observaciones = "N/A";
       }
-      payload.conviviente = 0;
+      payload.conviviente = 1;
       payload.autorizado_retirar = 0;
       
       payload._method = "POST";
