@@ -163,7 +163,6 @@
         this.vinculandoPerfil = true;
         persona = _.pickBy(persona, _.identity);
         persona.ciudad = persona.ciudad.nombre;
-        persona.barrio = persona.barrio.nombre || '';
         persona.familiar = 1;
         if(persona.sexo === "Masculino" || persona.sexo === "MASCULINO"){
           persona.vinculo = "Padre";
@@ -180,7 +179,6 @@
         pers._method = "POST";
         pers.familiar = 1;
         pers.ciudad = pers.ciudad.nombre;
-        pers.barrio = pers.barrio.nombre || '';
         pers.alumno = 0;
         if(pers.sexo === "Masculino" || pers.sexo === "MASCULINO"){
           pers.vinculo = "Padre";
