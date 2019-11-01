@@ -15,6 +15,3 @@ self.addEventListener('activate', () => {
     }
   });
 });
-
-self.addEventListener('load', () =>{
-})
