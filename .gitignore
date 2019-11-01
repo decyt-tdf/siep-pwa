@@ -10,3 +10,5 @@ src/components/wizard_inscripciones/step4\.vue
 src/pages/Home/Home\.vue
 
 src/pages/Inscripciones/Inscripciones\.vue
+
+webpack/package-lock.json
