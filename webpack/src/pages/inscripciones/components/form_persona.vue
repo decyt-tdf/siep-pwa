@@ -260,6 +260,7 @@
           this.disabledOnUpdate = false;
           this.form.email = store.state.user.authApi.email;
           this.form.barrio = { nombre:"" };
+          this.form.vinculo = ""
         }
 
         // MODO UPDATE
@@ -276,14 +277,16 @@
             if(!_.has(this.form,'barrio.nombre')){
               this.form.barrio = {nombre:""};
             }
-            // this.form.barrio = this.form.barrio.nombre;
-            // console.log("Form Persona: ",this.form);
+
+            if(!_.has(this.form,'familiares.vinculo')){
+              this.form.vinculo = ""
+            }else{
+              this.form.vinculo = this.form.familiares.vinculo
+            }
           }
         }
 
         this.form.familiar = 1;
-        // this.form.alumno = 0;
-
       }
 
       if(this.alumno)
