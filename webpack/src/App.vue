@@ -99,7 +99,6 @@
       // administracion(){}
     },
     created(){
-      console.log('APP Created');
       store.dispatch('extractToken');
       // SE HARÁ EN FUTURAS ACTUALIZACIONES
       // store.dispatch('getAdministracionData');

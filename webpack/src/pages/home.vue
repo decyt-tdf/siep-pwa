@@ -174,6 +174,7 @@
         if(persona.barrio.nombre){
           persona.barrio = persona.barrio.nombre;
         }
+
         persona.familiar = 1;
         if(persona.sexo === "Masculino" || persona.sexo === "MASCULINO"){
           persona.vinculo = "Padre";
@@ -195,6 +196,7 @@
         if(pers.barrio.nombre){
           pers.barrio = pers.barrio.nombre;
         }
+
         pers.alumno = 0;
         if(pers.sexo === "Masculino" || pers.sexo === "MASCULINO"){
           pers.vinculo = "Padre";
