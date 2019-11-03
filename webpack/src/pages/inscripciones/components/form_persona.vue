@@ -133,9 +133,11 @@
 
     <!-- Barrio -->
     <v-combobox
-            v-model="form.barrio.nombre"
+            v-model="form.barrio"
             :items="barriosApi"
             :rules="inputRules"
+            item-text="nombre"
+            item-value="nombre"
             label="Barrio donde vive"
             hint="Campo Requerido"
             :loading="user.apiNeighborhoodFiltering"
@@ -259,7 +261,7 @@
         if(this.mode == 'create'){
           this.disabledOnUpdate = false;
           this.form.email = store.state.user.authApi.email;
-          this.form.barrio = { nombre:"" };
+          // this.form.barrio = { nombre:null };
           this.form.vinculo = ""
         }
 
@@ -268,15 +270,16 @@
           this.disabledOnUpdate = true;
           if(store.getters.persona) {
             this.form = store.getters.persona;
-            if(!_.has(this.form,'ciudad.nombre')){
-              this.form.barrio = {nombre:""};
-            }else{
+            console.log("Persona",this.form);
+            if(_.has(this.form,'ciudad.nombre')){
+              // this.form.ciudad = {nombre:null};
               this.form.ciudad = this.form.ciudad.nombre;
+            }else{
             }
 
-            if(!_.has(this.form,'barrio.nombre')){
-              this.form.barrio = {nombre:""};
-            }
+            // if(!_.has(this.form,'barrio.nombre')){
+            //   this.form.barrio = {nombre:null};
+            // }
 
             if(!_.has(this.form,'familiares.vinculo')){
               this.form.vinculo = ""
@@ -295,14 +298,14 @@
         this.form.alumno = 1;
         // this.form.familiar = 0;
         // this.texto_observacion = '';
-        if(!_.has(this.form,'ciudad.nombre')){
-          this.form.barrio = {nombre:""};
-        }else{
+        if(_.has(this.form,'ciudad.nombre')){
+          // this.form.ciudad = {nombre:null};
           this.form.ciudad = this.form.ciudad.nombre;
+        }else{
         }
         
         if(!_.has(this.form,'barrio.nombre')){
-          this.form.barrio = {nombre:""};
+          this.form.barrio = {nombre:null};
         }
       }
 
@@ -370,7 +373,10 @@
           this.form.familiar = this.getFamiliar ? 1 : 0;
           this.form.alumno = !this.getFamiliar ? 1 : 0,
           this.form._method = "PUT";
-          this.form.barrio = this.form.barrio.nombre;
+          if(this.form.barrio.nombre){
+            this.form.barrio = this.form.barrio.nombre;
+          }
+          console.log("A punto de actualizar persona",this.form);
           store.dispatch('apiUpdatePersona',this.form);
         }
         
