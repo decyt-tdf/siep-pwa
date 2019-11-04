@@ -48,7 +48,7 @@
             <v-layout row wrap>
               <div v-show="personNotFound">
                 <p class="not_found">
-                  EL NÚMERO DE DOCUMENTO INGRESADO NO PERTENECE A NINGUNA PERSONA REGISTRADA
+                  EL NÚMERO DE DOCUMENTO INGRESADO NO PERTENECE A NINGÚNA PERSONA REGISTRADA
                 </p>
               </div>
               <v-flex
@@ -61,7 +61,7 @@
                     <v-flex xs12 flexbox>
                       <v-card-text>
                         <div>
-                          <h3 class="subheading mb-0">{{ res.nombres.toUpperCase() }} {{ res.apellidos.toUpperCase() }}</h3>
+                          <h2 class="subheading mb-0">{{ res.nombres }} {{ res.apellidos}}</h2>
                           <h3>DNI: {{ res.documento_nro}}</h3>
                         </div>
                       </v-card-text>
@@ -174,7 +174,6 @@
         if(persona.barrio.nombre){
           persona.barrio = persona.barrio.nombre;
         }
-
         persona.familiar = 1;
         if(persona.sexo === "Masculino" || persona.sexo === "MASCULINO"){
           persona.vinculo = "Padre";
@@ -194,7 +193,7 @@
           pers.ciudad = pers.ciudad.nombre;
         }
         if(pers.barrio.nombre){
-          pers.barrio = pers.barrio.nombre;
+          pers.barrio = pers.barrio.nombre;          
         }
 
         pers.alumno = 0;
@@ -208,6 +207,7 @@
       startFindPersona:function(){
         let vm = this;
         vm.findPersonaRunning = true;
+        vm.personNotFound = false;
         vm.resultado = [];
         
         store.dispatch('apiFindPersona',{
@@ -257,5 +257,9 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.not_found{
+  color: #ff5f00 /*ff8c00*/
 }
 </style>
