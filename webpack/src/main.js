@@ -14,6 +14,8 @@ switch (browser && browser.name) {
   case 'chrome':
   case 'firefox':
   case 'edge':
+  case 'safari':
+  case 'webkit':
     console.log('Navegador Soportado');
     break;
   default:
@@ -79,6 +81,18 @@ Vue.use(VueAnalytics,{
     sendHitTask: isProd
   }
 });
+
+/** 
+ *   NOTIFICACIONES PUSH
+ **/
+
+// import {initializeFirebase,askForPermissioToReceiveNotifications} from './push-notification'
+// initializeFirebase()
+// askForPermissioToReceiveNotifications()
+
+/** 
+ *  END NOTIFICACIONES PUSH
+ **/
 
 /* eslint-disable no-new */
 new Vue({

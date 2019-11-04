@@ -133,9 +133,11 @@
 
     <!-- Barrio -->
     <v-combobox
-            v-model="form.barrio.nombre"
+            v-model="form.barrio"
             :items="barriosApi"
             :rules="inputRules"
+            item-text="nombre"
+            item-value="nombre"
             label="Barrio donde vive"
             hint="Campo Requerido"
             :loading="user.apiNeighborhoodFiltering"
@@ -259,7 +261,8 @@
         if(this.mode == 'create'){
           this.disabledOnUpdate = false;
           this.form.email = store.state.user.authApi.email;
-          this.form.barrio = { nombre:"" };
+          // this.form.barrio = { nombre:null };
+          this.form.vinculo = ""
         }
 
         // MODO UPDATE
@@ -267,23 +270,23 @@
           this.disabledOnUpdate = true;
           if(store.getters.persona) {
             this.form = store.getters.persona;
-            if(!_.has(this.form,'ciudad.nombre')){
-              this.form.barrio = {nombre:""};
-            }else{
+            if(_.has(this.form,'ciudad.nombre')){
               this.form.ciudad = this.form.ciudad.nombre;
             }
 
-            if(!_.has(this.form,'barrio.nombre')){
-              this.form.barrio = {nombre:""};
+            if(_.has(this.form,'barrio.nombre')){
+              this.form.barrio = this.form.barrio.nombre;
             }
-            // this.form.barrio = this.form.barrio.nombre;
-            // console.log("Form Persona: ",this.form);
+
+            if(!_.has(this.form,'familiares.vinculo')){
+              this.form.vinculo = ""
+            }else{
+              this.form.vinculo = this.form.familiares.vinculo
+            }
           }
         }
 
         this.form.familiar = 1;
-        // this.form.alumno = 0;
-
       }
 
       if(this.alumno)
@@ -292,14 +295,12 @@
         this.form.alumno = 1;
         // this.form.familiar = 0;
         // this.texto_observacion = '';
-        if(!_.has(this.form,'ciudad.nombre')){
-          this.form.barrio = {nombre:""};
-        }else{
+        if(_.has(this.form,'ciudad.nombre')){
           this.form.ciudad = this.form.ciudad.nombre;
         }
         
-        if(!_.has(this.form,'barrio.nombre')){
-          this.form.barrio = {nombre:""};
+        if(_.has(this.form,'barrio.nombre')){
+          this.form.barrio = this.form.barrio.nombre;
         }
       }
 
@@ -345,7 +346,9 @@
           this.form._method = "POST";
           this.form.familiar = this.getFamiliar ? 1 : 0;
           this.form.alumno = !this.getFamiliar ? 1 : 0;
-          this.form.barrio = this.form.barrio.nombre;
+          if(this.form.barrio.nombre){
+            this.form.barrio = this.form.barrio.nombre;
+          }
           store.dispatch('apiCreatePersona',this.form);
         }
         
@@ -367,7 +370,9 @@
           this.form.familiar = this.getFamiliar ? 1 : 0;
           this.form.alumno = !this.getFamiliar ? 1 : 0,
           this.form._method = "PUT";
-          this.form.barrio = this.form.barrio.nombre;
+          if(this.form.barrio.nombre){
+            this.form.barrio = this.form.barrio.nombre;
+          }
           store.dispatch('apiUpdatePersona',this.form);
         }
         
@@ -404,9 +409,9 @@
         this.$refs.menu.save(computedDateFormatted)
       },
       fillNeighborhood() {
-        if(this.form.barrio  && this.form.barrio.length > 0){
-          this.form.barrio = "";
-        }
+        // if(this.form.barrio  && this.form.barrio.length > 0){
+        //   this.form.barrio = "";
+        // }
         store.dispatch('apiFilterNeighborhood',{ciudad:this.form.ciudad});
       },
       scrollTop(){
