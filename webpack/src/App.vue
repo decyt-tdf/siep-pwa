@@ -40,7 +40,6 @@
         <router-view/>
       </transition-page>
     </v-content>
-
     <!-- Footer -->
     <v-footer
       height="auto"

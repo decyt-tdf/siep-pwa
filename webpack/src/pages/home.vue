@@ -262,4 +262,13 @@ a {
 .not_found{
   color: #ff5f00 /*ff8c00*/
 }
+.dialog.centered-dialog,
+.v-dialog.centered-dialog
+{
+  /* background: #282c2dad; */
+  box-shadow: none;
+  border-radius: 6px;
+  width: auto;
+  color: whitesmoke;
+}
 </style>
